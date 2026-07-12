@@ -1,0 +1,1097 @@
+<style>
+  :root{
+    --ground:#0A0F1A;--surface:#121A28;--surface-2:#18212F;--surface-3:#1E2938;
+    --line:rgba(148,172,204,.13);--line-strong:rgba(148,172,204,.24);
+    --ink:#EAF0F8;--ink-dim:#9BACC4;--ink-faint:#66788F;
+    --brand:#3E82C4;--brand-deep:#2E6DA4;
+    --signal:#46C7E8;--signal-soft:rgba(70,199,232,.12);
+    --amber:#E9B15A;--amber-soft:rgba(233,177,90,.14);
+    --good:#4FCF9A;--good-soft:rgba(79,207,154,.14);
+    --red:#F0776B;--red-soft:rgba(240,119,107,.14);
+    --violet:#9C8CF0;--violet-soft:rgba(156,140,240,.14);
+    --shadow:0 30px 70px -35px rgba(0,0,0,.75);--shadow-sm:0 10px 30px -18px rgba(0,0,0,.7);
+    --r:14px;--r-sm:9px;--r-xs:6px;
+    --font-sans:"Pretendard","Pretendard Variable",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Malgun Gothic",system-ui,sans-serif;
+    --font-mono:ui-monospace,"Cascadia Code","SF Mono",Consolas,"D2Coding",monospace;
+    --sidebar-w:238px;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --ground:#EEF3F9;--surface:#FFFFFF;--surface-2:#F3F7FC;--surface-3:#E9F0F8;
+      --line:rgba(30,58,95,.11);--line-strong:rgba(30,58,95,.2);
+      --ink:#0E1A2A;--ink-dim:#4C5E76;--ink-faint:#8194AB;
+      --brand:#2E6DA4;--brand-deep:#235A8A;--signal:#0E82B4;--signal-soft:rgba(14,130,180,.09);
+      --amber:#B27414;--amber-soft:rgba(178,116,20,.1);
+      --good:#1E9E6A;--good-soft:rgba(30,158,106,.1);
+      --red:#CB4B3E;--red-soft:rgba(203,75,62,.1);
+      --violet:#6E5BC7;--violet-soft:rgba(110,91,199,.1);
+      --shadow:0 30px 60px -35px rgba(30,58,95,.3);--shadow-sm:0 10px 26px -16px rgba(30,58,95,.28);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0A0F1A;--surface:#121A28;--surface-2:#18212F;--surface-3:#1E2938;
+    --line:rgba(148,172,204,.13);--line-strong:rgba(148,172,204,.24);
+    --ink:#EAF0F8;--ink-dim:#9BACC4;--ink-faint:#66788F;
+    --brand:#3E82C4;--brand-deep:#2E6DA4;--signal:#46C7E8;--signal-soft:rgba(70,199,232,.12);
+    --amber:#E9B15A;--amber-soft:rgba(233,177,90,.14);
+    --good:#4FCF9A;--good-soft:rgba(79,207,154,.14);
+    --red:#F0776B;--red-soft:rgba(240,119,107,.14);
+    --violet:#9C8CF0;--violet-soft:rgba(156,140,240,.14);
+  }
+  :root[data-theme="light"]{
+    --ground:#EEF3F9;--surface:#FFFFFF;--surface-2:#F3F7FC;--surface-3:#E9F0F8;
+    --line:rgba(30,58,95,.11);--line-strong:rgba(30,58,95,.2);
+    --ink:#0E1A2A;--ink-dim:#4C5E76;--ink-faint:#8194AB;
+    --brand:#2E6DA4;--brand-deep:#235A8A;--signal:#0E82B4;--signal-soft:rgba(14,130,180,.09);
+    --amber:#B27414;--amber-soft:rgba(178,116,20,.1);
+    --good:#1E9E6A;--good-soft:rgba(30,158,106,.1);
+    --red:#CB4B3E;--red-soft:rgba(203,75,62,.1);
+    --violet:#6E5BC7;--violet-soft:rgba(110,91,199,.1);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans);line-height:1.55;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3,h4{margin:0;font-weight:800;letter-spacing:-.02em;line-height:1.2;text-wrap:balance}
+  p{margin:0}
+  svg{display:block}
+  button{font-family:inherit;cursor:pointer}
+  .ico{stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  :focus-visible{outline:2px solid var(--signal);outline-offset:2px;border-radius:3px}
+
+  /* ===== app shell ===== */
+  .app{display:flex;min-height:100vh}
+
+  /* dot mark (logo) */
+  .mark{width:30px;height:30px;position:relative;flex:none}
+  .mark i{position:absolute;border-radius:50%;background:var(--signal)}
+  .mark i:first-child{width:18px;height:18px;top:0;left:0;background:var(--brand-deep)}
+  .mark i:last-child{width:11px;height:11px;bottom:0;right:0;background:var(--signal);box-shadow:0 0 10px var(--signal)}
+
+  .sidebar{width:var(--sidebar-w);flex:none;background:var(--surface);border-right:1px solid var(--line);
+    display:flex;flex-direction:column;padding:22px 16px;gap:20px;position:sticky;top:0;height:100vh;overflow-y:auto}
+  .brandrow{display:flex;align-items:center;gap:11px;padding:0 6px 4px}
+  .brandrow .bt{font-size:14.5px;font-weight:800;letter-spacing:-.01em}
+  .brandrow .bs{font-family:var(--font-mono);font-size:9.5px;color:var(--ink-faint);letter-spacing:.08em;margin-top:1px}
+
+  .navgroups{display:flex;flex-direction:column;gap:20px;flex:1}
+  .navgroup{display:flex;flex-direction:column;gap:3px}
+  .navgroup-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-faint);padding:0 12px;margin-bottom:5px}
+  .navitem{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--r-sm);border:1px solid transparent;
+    background:transparent;color:var(--ink-dim);font-size:13.5px;font-weight:600;text-align:left;width:100%;position:relative;transition:.15s}
+  .navitem svg{width:17px;height:17px;flex:none}
+  .navitem:hover{background:var(--surface-2);color:var(--ink)}
+  .navitem.active{background:var(--signal-soft);color:var(--signal);border-color:color-mix(in srgb,var(--signal) 30%,var(--line))}
+  .navitem .navlabel{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .navbadge{margin-left:auto;background:var(--surface-3);color:var(--ink-faint);font-family:var(--font-mono);font-size:10px;font-weight:700;
+    padding:1.5px 6.5px;border-radius:100px;line-height:1.5;flex:none}
+  .navitem.active .navbadge{background:color-mix(in srgb,var(--signal) 22%,transparent);color:var(--signal)}
+  .navbadge.alert{background:var(--red);color:#fff}
+
+  .sidebar-foot{margin-top:auto;display:flex;flex-direction:column;gap:12px}
+  .roleblock{border:1px solid var(--line);border-radius:var(--r-sm);padding:12px;background:var(--surface-2)}
+  .roleblock .rl{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px}
+  .roletoggle{display:flex;background:var(--surface-3);border-radius:var(--r-xs);padding:3px;gap:3px}
+  .roletoggle button{flex:1;border:0;background:transparent;color:var(--ink-dim);font-size:12.5px;font-weight:700;padding:7px 4px;border-radius:5px;transition:.15s}
+  .roletoggle button.on{background:var(--surface);color:var(--signal);box-shadow:var(--shadow-sm)}
+  .roledesc{font-size:11px;color:var(--ink-faint);margin-top:8px;line-height:1.5}
+
+  .main{flex:1;min-width:0;display:flex;flex-direction:column}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 30px;
+    border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--ground) 88%,transparent);
+    backdrop-filter:blur(12px);position:sticky;top:0;z-index:30;flex-wrap:wrap}
+  .tb-left{display:flex;align-items:center;gap:12px;min-width:0}
+  .backbtn{border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink-dim);width:32px;height:32px;
+    border-radius:var(--r-xs);display:grid;place-items:center;flex:none}
+  .backbtn svg{width:16px;height:16px}
+  #screenTitle{font-size:19px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .crumb{font-family:var(--font-mono);font-size:11px;color:var(--ink-faint)}
+  .tb-right{display:flex;align-items:center;gap:10px}
+  .proto-tag{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;color:var(--amber);
+    border:1px solid color-mix(in srgb,var(--amber) 40%,var(--line));padding:4px 9px;border-radius:100px;white-space:nowrap}
+  .iconbtn{background:var(--surface-2);border:1px solid var(--line-strong);color:var(--ink-dim);width:36px;height:36px;
+    border-radius:var(--r-sm);display:grid;place-items:center;position:relative;flex:none;transition:.15s}
+  .iconbtn:hover{color:var(--ink);border-color:var(--signal)}
+  .iconbtn svg{width:17px;height:17px}
+  .dotbadge{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--surface)}
+
+  .content{flex:1;padding:28px 30px 60px;max-width:1120px;width:100%;margin:0 auto}
+  .screen{display:none}
+  .screen.show{display:block;animation:rise .38s ease}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.screen.show{animation:none}}
+
+  /* summary strip */
+  .sumstrip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:26px}
+  @media(max-width:720px){.sumstrip{grid-template-columns:repeat(2,1fr)}}
+  .sumcard{border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;background:var(--surface)}
+  .sumcard .sv{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em;display:flex;align-items:baseline;gap:3px}
+  .sumcard .sv .u{font-size:12px;color:var(--ink-dim);font-weight:600}
+  .sumcard .sl{font-size:12px;color:var(--ink-faint);margin-top:5px}
+  .sumcard.warn .sv{color:var(--amber)}
+  .sumcard.sig .sv{color:var(--signal)}
+
+  .sechead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:32px 0 14px}
+  .sechead:first-child{margin-top:0}
+  .sechead h2{font-size:16.5px}
+  .sechead .cnt{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-faint)}
+
+  /* project cards grid (dashboard) */
+  .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .pcard{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:18px;cursor:pointer;
+    transition:.15s;text-align:left;display:flex;flex-direction:column;gap:12px;width:100%;color:var(--ink);font:inherit}
+  .pcard:hover{border-color:var(--signal);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+  .pcard .ph{display:flex;align-items:center;gap:11px}
+  .pcard .pav{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:14px;flex:none}
+  .pcard .pn{font-size:15px;font-weight:700}
+  .pcard .pc{font-size:11.5px;color:var(--ink-faint);margin-top:1px}
+  .pcard .prog2{display:flex;flex-direction:column;gap:6px}
+  .pcard .prow{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-dim)}
+  .pcard .prow b{color:var(--ink);font-variant-numeric:tabular-nums}
+  .track2{height:6px;border-radius:100px;background:var(--surface-3);overflow:hidden}
+  .fill2{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--brand),var(--signal))}
+  .pcard .pfoot{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+  .pill{font-family:var(--font-mono);font-size:10px;padding:3.5px 9px;border-radius:100px;white-space:nowrap;
+    display:inline-flex;align-items:center;gap:5px;font-weight:600}
+  .pill::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+  .pill.go{color:var(--good);background:var(--good-soft)}
+  .pill.run{color:var(--signal);background:var(--signal-soft)}
+  .pill.wait{color:var(--amber);background:var(--amber-soft)}
+  .pill.done{color:var(--ink-faint);background:var(--surface-3)}
+
+  /* project detail header */
+  .pdhead{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+  .pdhead .pav{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:18px;flex:none}
+  .pdhead h2{font-size:22px}
+  .pdhead .pdmeta{font-size:12.5px;color:var(--ink-faint);margin-top:3px}
+
+  .tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:24px}
+  .tab{border:0;background:transparent;color:var(--ink-faint);font-size:14px;font-weight:700;padding:11px 4px;
+    position:relative;margin-right:22px}
+  .tab.active{color:var(--ink)}
+  .tab.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--signal);border-radius:2px}
+
+  /* kanban */
+  .kanban{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .kcol{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px;display:flex;flex-direction:column;gap:9px;min-height:120px}
+  .kcol .kh{font-size:12px;font-weight:700;color:var(--ink-dim);display:flex;justify-content:space-between;align-items:center;padding:0 2px 4px}
+  .kcol .kn{font-family:var(--font-mono);font-size:10px;color:var(--ink-faint)}
+  .kcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xs);padding:11px 12px;font-size:12.5px}
+  .kcard .kt{font-weight:700;color:var(--ink);margin-bottom:5px}
+  .kcard .kd{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-faint)}
+  .kcard.urgent{border-left:3px solid var(--red)}
+  .kcard.approve{border-left:3px solid var(--amber)}
+  .kcard.finished{opacity:.55}
+
+  /* sns list */
+  .snslist{display:flex;flex-direction:column;gap:8px}
+  .snsrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface);flex-wrap:wrap}
+  .snsrow .sd{font-family:var(--font-mono);font-size:11px;color:var(--ink-faint);width:74px;flex:none}
+  .snsrow .st2{font-size:13px;font-weight:600;flex:1;min-width:120px}
+  .snsrow .actions{display:flex;gap:6px}
+
+  /* doc list */
+  .doclist{display:flex;flex-direction:column;gap:8px}
+  .docrow{display:flex;align-items:center;gap:13px;padding:13px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface);flex-wrap:wrap}
+  .docrow .dic{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;flex:none}
+  .docrow .dic svg{width:17px;height:17px}
+  .docrow .dinfo{min-width:0;flex:1}
+  .docrow .dn{font-size:13.5px;font-weight:700}
+  .docrow .dm{font-size:11px;color:var(--ink-faint);font-family:var(--font-mono);margin-top:2px}
+  .docrow .dtag{font-size:11px;color:var(--ink-dim);border:1px solid var(--line);padding:3px 8px;border-radius:100px;flex:none}
+
+  .btn{border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);font-size:12.5px;font-weight:700;
+    padding:9px 15px;border-radius:var(--r-xs);display:inline-flex;align-items:center;gap:7px;transition:.15s}
+  .btn svg{width:15px;height:15px}
+  .btn:hover{border-color:var(--signal);color:var(--signal)}
+  .btn.primary{background:var(--signal);border-color:transparent;color:var(--ground)}
+  .btn.primary:hover{opacity:.9;color:var(--ground)}
+  .btn.sm{padding:6px 11px;font-size:11.5px}
+  .btn.ghost{background:transparent}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:20px}
+
+  .plain{border:1px solid var(--line-strong);border-left:3px solid var(--signal);border-radius:var(--r-sm);
+    padding:14px 16px;background:var(--surface);display:flex;gap:11px;align-items:flex-start;font-size:13px;color:var(--ink-dim);line-height:1.6}
+  .plain svg{width:16px;height:16px;color:var(--signal);flex:none;margin-top:1px}
+  .plain b{color:var(--ink)}
+
+  .empty{border:1px dashed var(--line-strong);border-radius:var(--r);padding:34px;text-align:center;color:var(--ink-faint);font-size:13px}
+
+  /* content automation workflow chips */
+  .wf2{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px}
+  .wfstep{font-size:12.5px;font-weight:600;padding:9px 14px;border-radius:100px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink-dim)}
+  .wfstep.ai{color:var(--signal);border-color:color-mix(in srgb,var(--signal) 35%,var(--line));background:var(--signal-soft)}
+  .wfstep.human{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 35%,var(--line));background:var(--amber-soft)}
+  .wfarrow{color:var(--ink-faint);display:flex}
+  .wfarrow svg{width:15px;height:15px}
+
+  /* crm pipeline cards */
+  .crmcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xs);padding:12px}
+  .crmcard .cn{font-weight:700;font-size:13px;margin-bottom:4px}
+  .crmcard .cc2{font-size:11px;color:var(--ink-faint)}
+
+  /* ad performance table + AI insights */
+  .perftable{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:8px}
+  .perftable th{text-align:left;font-size:10px;color:var(--ink-faint);font-weight:600;padding:0 10px 9px;
+    font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--line)}
+  .perftable td{padding:11px 10px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+  .perftable tr:last-child td{border-bottom:0}
+  .perftable td:first-child{font-weight:700;font-variant-numeric:normal}
+  .perftable .roas-good{color:var(--good);font-weight:700}
+  .perftable .roas-warn{color:var(--amber);font-weight:700}
+  .chtag{font-family:var(--font-mono);font-size:10px;color:var(--ink-dim);border:1px solid var(--line);padding:2.5px 7px;border-radius:100px}
+
+  .insightlist{display:flex;flex-direction:column;gap:10px}
+  .insight{display:flex;gap:12px;padding:14px 15px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface)}
+  .insight .iic2{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;flex:none;background:var(--signal-soft);color:var(--signal)}
+  .insight .iic2 svg{width:16px;height:16px}
+  .insight .ibody{min-width:0}
+  .insight .itxt{font-size:13px;color:var(--ink-dim);line-height:1.6}
+  .insight .itxt b{color:var(--ink)}
+  .insight .isrc{font-family:var(--font-mono);font-size:10px;color:var(--ink-faint);margin-top:6px;letter-spacing:.04em}
+
+  .newslist{display:flex;flex-direction:column;gap:9px}
+  .newsrow{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--ink-dim);line-height:1.5;padding:2px 0}
+  .newsrow .nk{font-family:var(--font-mono);font-size:9.5px;color:var(--signal);border:1px solid color-mix(in srgb,var(--signal) 30%,var(--line));border-radius:3px;padding:2px 6px;flex:none;margin-top:1px}
+
+  /* drawer (kakao) */
+  .scrim{position:fixed;inset:0;background:rgba(4,8,14,.55);opacity:0;pointer-events:none;transition:.25s;z-index:50}
+  .scrim.show{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:340px;max-width:88vw;background:var(--surface);
+    border-left:1px solid var(--line);box-shadow:var(--shadow);transform:translateX(100%);transition:.3s cubic-bezier(.4,0,.2,1);z-index:60;
+    display:flex;flex-direction:column}
+  .drawer.show{transform:none}
+  .drawer-head{padding:20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+  .drawer-head h3{font-size:15px}
+  .drawer-body{padding:18px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:14px;background:linear-gradient(180deg,var(--signal-soft),transparent 20%)}
+  .kkbubble{background:#FFEB3B0d;border:1px solid var(--line-strong);border-radius:var(--r-sm);overflow:hidden;background:var(--surface-2)}
+  .kkbubble .kkh{background:#F9E000;color:#3C1E1E;font-size:11px;font-weight:800;padding:7px 12px;display:flex;align-items:center;gap:6px}
+  .kkbubble .kkb{padding:12px 13px;font-size:12.5px;line-height:1.55;color:var(--ink)}
+  .kkbubble .kkt{font-family:var(--font-mono);font-size:10px;color:var(--ink-faint);padding:0 13px 11px}
+  .kkbubble .kkb b{color:var(--signal)}
+
+  /* modal */
+  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:70;padding:20px}
+  .modal.show{display:flex}
+  .modal-card{background:var(--surface);border:1px solid var(--line-strong);border-radius:var(--r);width:100%;max-width:560px;
+    max-height:88vh;overflow-y:auto;box-shadow:var(--shadow)}
+  .modal-head{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+  .modal-head h3{font-size:16.5px}
+  .modal-body{padding:22px}
+  .modal-close{background:var(--surface-2);border:1px solid var(--line-strong);width:30px;height:30px;border-radius:8px;
+    display:grid;place-items:center;color:var(--ink-dim);flex:none}
+  .modal-close svg{width:15px;height:15px}
+
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+  .field label{font-size:12px;color:var(--ink-faint);font-weight:600}
+  .field input,.field select{background:var(--surface-2);border:1px solid var(--line-strong);border-radius:var(--r-xs);
+    padding:9px 11px;color:var(--ink);font-size:13.5px;font-family:inherit;width:100%}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--signal)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+  .qtable{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:14px}
+  .qtable th{text-align:left;font-size:10.5px;color:var(--ink-faint);font-weight:600;padding:0 8px 8px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.05em}
+  .qtable td{padding:6px 8px}
+  .qtable input{background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:7px 8px;color:var(--ink);font-size:12.5px;width:100%;font-family:inherit}
+  .qtable td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+  .qtotal{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line-strong);padding-top:14px;margin-top:4px}
+  .qtotal .ql{font-size:13px;color:var(--ink-dim)}
+  .qtotal .qv{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--signal)}
+
+  .badge2{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--good);background:var(--good-soft);
+    padding:5px 10px;border-radius:100px;font-weight:600}
+  .badge2 svg{width:13px;height:13px}
+
+  /* approvals list */
+  .apprlist{display:flex;flex-direction:column;gap:10px}
+  .apprrow{display:flex;align-items:center;gap:13px;padding:15px 16px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface);flex-wrap:wrap}
+  .apprrow .aic{width:38px;height:38px;border-radius:10px;background:var(--amber-soft);color:var(--amber);display:grid;place-items:center;flex:none}
+  .apprrow .aic svg{width:19px;height:19px}
+  .apprrow .ainfo{min-width:0;flex:1}
+  .apprrow .at{font-size:13.5px;font-weight:700}
+  .apprrow .as{font-size:11.5px;color:var(--ink-faint);margin-top:2px}
+  .apprrow .aactions{display:flex;gap:8px}
+  .btn.ok{background:var(--good);border-color:transparent;color:var(--ground)}
+  .btn.no{background:transparent;color:var(--ink-dim)}
+  .rolelock{font-family:var(--font-mono);font-size:11px;color:var(--ink-faint);display:flex;align-items:center;gap:6px}
+  .rolelock svg{width:14px;height:14px}
+
+  /* bottom nav (mobile) */
+  .bottomnav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--line);
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:40;overflow-x:auto;gap:2px}
+  .bnitem{background:transparent;border:0;color:var(--ink-faint);display:flex;flex-direction:column;align-items:center;gap:3px;
+    font-size:9px;font-weight:600;padding:7px 10px;border-radius:8px;position:relative;flex:none;white-space:nowrap}
+  .bnitem svg{width:18px;height:18px}
+  .bnitem.active{color:var(--signal)}
+  .bnitem .navbadge{position:absolute;top:2px;right:2px;margin:0}
+
+  @media(max-width:820px){
+    .sidebar{display:none}
+    .bottomnav{display:flex}
+    .content{padding:20px 16px 84px}
+    .topbar{padding:14px 16px}
+    .proto-tag{display:none}
+  }
+  @media(max-width:520px){
+    .kanban{grid-template-columns:repeat(2,1fr)}
+    .row2{grid-template-columns:1fr}
+  }
+  @media(max-width:380px){
+    .kanban{grid-template-columns:1fr}
+  }
+</style>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brandrow">
+      <div class="mark"><i></i><i></i></div>
+      <div><div class="bt">브로닷 ERP</div><div class="bs">BRODOT · OPERATIONS</div></div>
+    </div>
+    <div class="navgroups">
+      <div class="navgroup">
+        <button class="navitem active" data-nav="dashboard">
+          <svg viewBox="0 0 24 24" class="ico"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
+          <span class="navlabel">대시보드</span>
+        </button>
+      </div>
+      <div class="navgroup">
+        <div class="navgroup-label">영업 · 고객</div>
+        <button class="navitem" data-nav="crm">
+          <svg viewBox="0 0 24 24" class="ico"><circle cx="9" cy="8" r="3.4"/><path d="M3 20v-1c0-3 2.7-5 6-5s6 2 6 5v1"/><path d="M17 7.5a3 3 0 0 1 0 5.8M21 20v-1c0-2.3-1.7-4.1-4-4.7"/></svg>
+          <span class="navlabel">고객사</span>
+          <span class="navbadge" id="crmBadgeNav">6</span>
+        </button>
+        <button class="navitem" data-nav="projects">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
+          <span class="navlabel">프로젝트</span>
+          <span class="navbadge" id="projBadgeNav">6</span>
+        </button>
+      </div>
+      <div class="navgroup">
+        <div class="navgroup-label">제작 · 운영</div>
+        <button class="navitem" data-nav="documents">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M6 2h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1ZM14 2v5h5"/></svg>
+          <span class="navlabel">문서함</span>
+        </button>
+        <button class="navitem" data-nav="content">
+          <svg viewBox="0 0 24 24" class="ico"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21.5 7v10l-6-3.5"/></svg>
+          <span class="navlabel">콘텐츠 자동화</span>
+        </button>
+        <button class="navitem" data-nav="approvals">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span class="navlabel">승인함</span>
+          <span class="navbadge alert" id="apprBadgeNav">2</span>
+        </button>
+      </div>
+      <div class="navgroup">
+        <div class="navgroup-label">성과 · 리포트</div>
+        <button class="navitem" data-nav="ads">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M4 20V4M4 20h16M8 16v-4M12 16V9M16 16v-6"/></svg>
+          <span class="navlabel">광고성과</span>
+        </button>
+      </div>
+      <div class="navgroup">
+        <div class="navgroup-label">정산</div>
+        <button class="navitem" data-nav="billing">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+          <span class="navlabel">견적 · 세금계산서</span>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-foot">
+      <div class="roleblock">
+        <div class="rl">지금 보는 화면</div>
+        <div class="roletoggle">
+          <button class="on" data-role="operator">이보석</button>
+          <button data-role="ceo">대표</button>
+        </div>
+        <div class="roledesc" id="roleDesc">운영총괄 — 전체 편집 권한</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="tb-left">
+        <button class="backbtn" id="backBtn" hidden aria-label="뒤로">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div>
+          <h1 id="screenTitle">대시보드</h1>
+        </div>
+      </div>
+      <div class="tb-right">
+        <span class="proto-tag">PROTOTYPE · DEMO DATA</span>
+        <button class="iconbtn" id="themeBtn" aria-label="테마 전환">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>
+        </button>
+        <button class="iconbtn" id="bellBtn" aria-label="알림">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          <span class="dotbadge"></span>
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- ================= DASHBOARD ================= -->
+      <section class="screen show" data-screen="dashboard">
+        <div class="sumstrip">
+          <div class="sumcard"><div class="sv" id="sumProjCnt">6</div><div class="sl">진행중 고객사 프로젝트</div></div>
+          <div class="sumcard warn"><div class="sv">2</div><div class="sl">이번주 마감 임박</div></div>
+          <div class="sumcard sig"><div class="sv">2</div><div class="sl">승인 대기중</div></div>
+          <div class="sumcard"><div class="sv">7<span class="u">건</span></div><div class="sl">이번달 발행 완료</div></div>
+        </div>
+
+        <div class="sechead"><h2>진행중 프로젝트</h2><span class="cnt" id="dashProjCnt"></span></div>
+        <div class="pgrid" id="pgrid"></div>
+        <div style="margin-top:14px"><button class="btn ghost" data-nav="projects">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M5 12h14M13 6l6 6-6 6"/></svg>프로젝트 전체보기</button></div>
+
+        <div class="sechead" style="margin-top:40px"><h2>마케팅 최신 뉴스 · AI 요약</h2></div>
+        <div class="newslist">
+          <div class="newsrow"><span class="nk">트렌드</span><span>숏폼 광고, 3초 내 후킹이 전환율을 좌우 — 플랫폼별 최적 길이 변화</span></div>
+          <div class="newsrow"><span class="nk">플랫폼</span><span>인스타그램, 신규 리믹스 기능 도입 — 바이럴 확산에 유리</span></div>
+          <div class="newsrow"><span class="nk">AI</span><span>영상 생성 AI 신모델 공개 — 제작 단가 추가 하락 전망</span></div>
+        </div>
+      </section>
+
+      <!-- ================= CRM (고객사) ================= -->
+      <section class="screen" data-screen="crm">
+        <div class="plain"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span>리드 문의부터 계약·진행·종료까지, 모든 고객사를 하나의 파이프라인으로 관리합니다. 계약이 확정되면 <b>프로젝트</b>로 넘어가 제작현황 추적이 시작됩니다.</span></div>
+        <div class="sechead"><h2>영업 파이프라인</h2><span class="cnt" id="crmCnt"></span></div>
+        <div class="kanban" id="crmBoard" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))"></div>
+      </section>
+
+      <!-- ================= PROJECTS (전체 목록) ================= -->
+      <section class="screen" data-screen="projects">
+        <div class="sechead"><h2>전체 프로젝트</h2><span class="cnt" id="projCnt"></span></div>
+        <div class="pgrid" id="pgridFull"></div>
+      </section>
+
+      <!-- ================= PROJECT DETAIL ================= -->
+      <section class="screen" data-screen="project">
+        <div class="pdhead" id="pdHead"></div>
+        <div class="tabs">
+          <button class="tab active" data-tab="production">제작현황</button>
+          <button class="tab" data-tab="docs">문서함</button>
+        </div>
+        <div id="tabProduction"></div>
+        <div id="tabDocs" style="display:none"></div>
+      </section>
+
+      <!-- ================= DOCUMENTS (전체) ================= -->
+      <section class="screen" data-screen="documents">
+        <div class="plain"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span>전체 고객사의 계약서·견적서·미팅록·인보이스·세금계산서·납품물을 한 곳에서 확인합니다. 프로젝트별 문서는 각 프로젝트 &gt; 문서함 탭에서도 볼 수 있어요.</span></div>
+        <div class="sechead"><h2>전체 문서 ({{ALL_DOCS_COUNT}})</h2></div>
+        <div class="doclist" id="allDocs"></div>
+      </section>
+
+      <!-- ================= CONTENT AUTOMATION ================= -->
+      <section class="screen" data-screen="content">
+        <div class="plain"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span>SNS·바이럴 콘텐츠는 AI가 기획·초안까지 생성하고, 사람은 감수·승인만 합니다. <b style="color:var(--signal)">파란색</b>은 AI, <b style="color:var(--amber)">노란색</b>은 사람이 하는 단계입니다.</span></div>
+        <div class="sumstrip" style="margin-top:20px">
+          <div class="sumcard sig"><div class="sv">12<span class="u">건</span></div><div class="sl">이번달 AI 초안 생성</div></div>
+          <div class="sumcard"><div class="sv">4<span class="u">건</span></div><div class="sl">감수 대기</div></div>
+          <div class="sumcard warn"><div class="sv">2<span class="u">건</span></div><div class="sl">발행 승인 대기</div></div>
+          <div class="sumcard"><div class="sv">96<span class="u">%</span></div><div class="sl">자동화 처리 비율</div></div>
+        </div>
+        <div class="sechead"><h2>자동화 흐름</h2></div>
+        <div class="wf2">
+          <div class="wfstep ai">AI · 주제 기획</div>
+          <div class="wfarrow"><svg viewBox="0 0 24 24" class="ico"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="wfstep ai">AI · 초안 생성</div>
+          <div class="wfarrow"><svg viewBox="0 0 24 24" class="ico"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="wfstep human">사람 · 감수</div>
+          <div class="wfarrow"><svg viewBox="0 0 24 24" class="ico"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="wfstep human">대표 · 발행승인</div>
+          <div class="wfarrow"><svg viewBox="0 0 24 24" class="ico"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="wfstep ai">AI · 예약 발행</div>
+        </div>
+        <div class="sechead"><h2>AI 초안 · 감수 대기열</h2><span class="cnt">4건</span></div>
+        <div class="doclist" id="contentQueue"></div>
+      </section>
+
+      <!-- ================= AD PERFORMANCE ================= -->
+      <section class="screen" data-screen="ads">
+        <div class="plain"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span>광고 플랫폼 로그(메타·구글·네이버·카카오) + 웹사이트 방문 로그(GA4) + SNS 게시물 인사이트 로그를 모아 AI가 <b>왜 이런 성과가 나왔는지</b>까지 분석합니다.</span></div>
+        <div class="plain" style="border-left-color:var(--amber)"><svg viewBox="0 0 24 24" style="color:var(--amber)"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+          <span><b>자동 연동 제한:</b> 네이버 블로그·카페는 공식 오픈 API가 없어 자동 수집이 어렵습니다(수동 확인). 틱톡은 비즈니스 인증·앱 심사가 필요해 초기 단계에서는 제외합니다.</span></div>
+        <div class="sumstrip" style="margin-top:20px">
+          <div class="sumcard sig"><div class="sv">4.6<span class="u">배</span></div><div class="sl">전체 평균 ROAS</div></div>
+          <div class="sumcard"><div class="sv">82<span class="u">만</span></div><div class="sl">GA4 세션수 (이번달)</div></div>
+          <div class="sumcard"><div class="sv">3.1<span class="u">%</span></div><div class="sl">랜딩 평균 전환율</div></div>
+          <div class="sumcard warn"><div class="sv">41<span class="u">%</span></div><div class="sl">평균 이탈률</div></div>
+        </div>
+
+        <div class="sechead"><h2>고객사별 채널 성과</h2><span class="cnt">이번달</span></div>
+        <div style="overflow-x:auto"><table class="perftable">
+          <thead><tr><th>고객사</th><th>채널</th><th>지출</th><th>전환</th><th>ROAS</th><th>출처</th></tr></thead>
+          <tbody>
+            <tr><td>한화리조트</td><td>메타 광고</td><td>₩ 3.2M</td><td>128</td><td class="roas-good">5.1배</td><td><span class="chtag">광고로그</span></td></tr>
+            <tr><td>성원시스템</td><td>구글 검색광고</td><td>₩ 1.8M</td><td>41</td><td class="roas-warn">2.4배</td><td><span class="chtag">광고로그</span></td></tr>
+            <tr><td>로지로이</td><td>카카오 · 알림톡</td><td>₩ 0.6M</td><td>63</td><td class="roas-good">6.0배</td><td><span class="chtag">광고로그</span></td></tr>
+            <tr><td>한화리조트</td><td>인스타그램</td><td>-</td><td>도달 41만</td><td>-</td><td><span class="chtag">SNS 인사이트</span></td></tr>
+            <tr><td>성원시스템</td><td>랜딩페이지</td><td>-</td><td>이탈률 42%</td><td>-</td><td><span class="chtag">GA4</span></td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="sechead"><h2>AI 로그분석 인사이트</h2></div>
+        <div class="insightlist">
+          <div class="insight"><div class="iic2"><svg viewBox="0 0 24 24" class="ico"><path d="M4 20V4M4 20h16M8 16v-4M12 16V9M16 16v-6"/></svg></div>
+            <div class="ibody"><div class="itxt"><b>한화리조트 메타 광고 ROAS 5.1배(▲0.6)</b> — 릴스 소재를 사용한 캠페인의 CTR이 이전 대비 18%p 높음. 동일 포맷으로 후속 소재 추가 제작 추천.</div>
+            <div class="isrc">근거: 메타 광고 로그 · 최근 14일</div></div></div>
+          <div class="insight"><div class="iic2"><svg viewBox="0 0 24 24" class="ico"><path d="M3 3v18h18M8 14l3-4 3 3 4-6"/></svg></div>
+            <div class="ibody"><div class="itxt"><b>성원시스템 랜딩페이지 이탈률 42%</b> — '요금 안내' 섹션 진입 직후 이탈이 집중됨. 해당 구간 로딩 지연(평균 2.8초) 확인 필요.</div>
+            <div class="isrc">근거: GA4 방문자 로그 · 이벤트 흐름 분석</div></div></div>
+          <div class="insight"><div class="iic2"><svg viewBox="0 0 24 24" class="ico"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+            <div class="ibody"><div class="itxt"><b>로지로이 카카오 알림톡 신규유입 32%↑</b> — 이벤트 알림톡 발송 직후 3시간 내 예약 문의가 집중. 발송 요일·시간대를 화·목 오전으로 고정 시 효과 유지 전망.</div>
+            <div class="isrc">근거: 카카오 알림톡 로그 + GA4 유입경로</div></div></div>
+        </div>
+      </section>
+
+      <!-- ================= BILLING ================= -->
+      <section class="screen" data-screen="billing">
+        <div class="btnrow">
+          <button class="btn primary" id="openQuoteBtn">
+            <svg viewBox="0 0 24 24" class="ico"><path d="M12 5v14M5 12h14"/></svg>
+            새 견적서 작성
+          </button>
+          <button class="btn" id="openTaxBtn">
+            <svg viewBox="0 0 24 24" class="ico"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/></svg>
+            세금계산서 발행
+          </button>
+        </div>
+        <div class="sechead"><h2>견적서</h2><span class="cnt" id="quoteCnt"></span></div>
+        <div class="doclist" id="quoteList"></div>
+        <div class="sechead"><h2>세금계산서 <span style="font-weight:400;color:var(--ink-faint);font-size:12px">· 팝빌 연동</span></h2><span class="cnt" id="taxCnt"></span></div>
+        <div class="doclist" id="taxList"></div>
+      </section>
+
+      <!-- ================= APPROVALS ================= -->
+      <section class="screen" data-screen="approvals">
+        <div class="plain" id="apprHint"></div>
+        <div class="sechead" style="margin-top:24px"><h2>승인 대기</h2><span class="cnt" id="apprCount"></span></div>
+        <div class="apprlist" id="apprList"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <nav class="bottomnav">
+    <button class="bnitem active" data-nav="dashboard"><svg viewBox="0 0 24 24" class="ico"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>대시보드</button>
+    <button class="bnitem" data-nav="crm"><svg viewBox="0 0 24 24" class="ico"><circle cx="9" cy="8" r="3.4"/><path d="M3 20v-1c0-3 2.7-5 6-5s6 2 6 5v1"/><path d="M17 7.5a3 3 0 0 1 0 5.8M21 20v-1c0-2.3-1.7-4.1-4-4.7"/></svg>고객사</button>
+    <button class="bnitem" data-nav="projects"><svg viewBox="0 0 24 24" class="ico"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>프로젝트</button>
+    <button class="bnitem" data-nav="documents"><svg viewBox="0 0 24 24" class="ico"><path d="M6 2h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1ZM14 2v5h5"/></svg>문서함</button>
+    <button class="bnitem" data-nav="content"><svg viewBox="0 0 24 24" class="ico"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21.5 7v10l-6-3.5"/></svg>콘텐츠</button>
+    <button class="bnitem" data-nav="ads"><svg viewBox="0 0 24 24" class="ico"><path d="M4 20V4M4 20h16M8 16v-4M12 16V9M16 16v-6"/></svg>광고성과</button>
+    <button class="bnitem" data-nav="billing"><svg viewBox="0 0 24 24" class="ico"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/></svg>정산</button>
+    <button class="bnitem" data-nav="approvals">
+      <svg viewBox="0 0 24 24" class="ico"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>승인함
+      <span class="navbadge alert" id="apprBadgeBn">2</span>
+    </button>
+  </nav>
+</div>
+
+<div class="scrim" id="scrim"></div>
+
+<!-- kakao drawer -->
+<div class="drawer" id="kakaoDrawer">
+  <div class="drawer-head"><h3>카카오 알림톡 미리보기</h3>
+    <button class="modal-close" id="closeDrawer"><svg viewBox="0 0 24 24" class="ico"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-body">
+    <div class="kkbubble">
+      <div class="kkh"><svg viewBox="0 0 24 24" style="width:13px;height:13px" fill="currentColor"><path d="M12 2C6.5 2 2 5.5 2 10c0 2.9 2 5.5 5 7l-1 3.5 3.8-2c.7.1 1.4.2 2.2.2 5.5 0 10-3.6 10-8S17.5 2 12 2Z"/></svg>알림톡 · 대표님</div>
+      <div class="kkb">[브로닷ERP] <b>G사</b> 랜딩페이지 최종 시안이 <b>고객사 컨펌 대기</b> 중입니다. 확인 후 승인 부탁드립니다.</div>
+      <div class="kkt">오늘 09:14</div>
+    </div>
+    <div class="kkbubble">
+      <div class="kkh"><svg viewBox="0 0 24 24" style="width:13px;height:13px" fill="currentColor"><path d="M12 2C6.5 2 2 5.5 2 10c0 2.9 2 5.5 5 7l-1 3.5 3.8-2c.7.1 1.4.2 2.2.2 5.5 0 10-3.6 10-8S17.5 2 12 2Z"/></svg>알림톡 · 대표님</div>
+      <div class="kkb">[브로닷ERP] <b>B사</b> 7/15 발행 예정 콘텐츠 승인이 필요합니다.</div>
+      <div class="kkt">오늘 08:40</div>
+    </div>
+    <div class="kkbubble">
+      <div class="kkh"><svg viewBox="0 0 24 24" style="width:13px;height:13px" fill="currentColor"><path d="M12 2C6.5 2 2 5.5 2 10c0 2.9 2 5.5 5 7l-1 3.5 3.8-2c.7.1 1.4.2 2.2.2 5.5 0 10-3.6 10-8S17.5 2 12 2Z"/></svg>알림톡 · 이보석님</div>
+      <div class="kkb"><b>S사</b> 계약 갱신 마감이 <b>D-2</b> 남았습니다.</div>
+      <div class="kkt">어제 18:02</div>
+    </div>
+    <div class="plain" style="border-left-color:var(--good)"><svg viewBox="0 0 24 24" style="color:var(--good)"><path d="M20 6 9 17l-5-5"/></svg>
+      <span>승인·마감 알림은 시스템을 열지 않아도 카카오톡으로 먼저 도착합니다. (팝빌·알림톡 API 연동 예정)</span></div>
+  </div>
+</div>
+
+<!-- quote modal -->
+<div class="modal" id="quoteModal">
+  <div class="modal-card">
+    <div class="modal-head"><h3>새 견적서 작성</h3>
+      <button class="modal-close" data-close-modal><svg viewBox="0 0 24 24" class="ico"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-body">
+      <div class="row2">
+        <div class="field"><label>고객사</label>
+          <select id="quoteClient"></select></div>
+        <div class="field"><label>견적일</label><input type="text" value="2026-07-12" readonly></div>
+      </div>
+      <table class="qtable">
+        <thead><tr><th style="width:46%">항목</th><th style="width:16%">수량</th><th style="width:20%">단가</th><th style="width:18%">금액</th></tr></thead>
+        <tbody id="qtBody"></tbody>
+      </table>
+      <button class="btn sm ghost" id="addQuoteRow" style="margin-bottom:16px">
+        <svg viewBox="0 0 24 24" class="ico"><path d="M12 5v14M5 12h14"/></svg>항목 추가</button>
+      <div class="qtotal"><span class="ql">합계 (VAT 별도)</span><span class="qv" id="qtTotal">₩ 0</span></div>
+      <div class="plain" style="margin-top:16px"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span>지금은 견적서 작성 화면까지 목업입니다. 실제 PDF 생성·발송은 다음 개발 단계에서 붙습니다.</span></div>
+      <div class="btnrow" style="margin-top:16px;margin-bottom:0">
+        <button class="btn primary" id="quotePreviewBtn">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          PDF 미리보기
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- tax invoice modal -->
+<div class="modal" id="taxModal">
+  <div class="modal-card">
+    <div class="modal-head"><h3>세금계산서 발행</h3>
+      <button class="modal-close" data-close-modal><svg viewBox="0 0 24 24" class="ico"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-body">
+      <div class="row2">
+        <div class="field"><label>공급자</label><input type="text" value="브로닷홀더스" readonly></div>
+        <div class="field"><label>공급받는자</label>
+          <select id="taxClient"></select></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>공급가액</label><input type="text" value="4,500,000" id="taxSupply"></div>
+        <div class="field"><label>세액 (10%)</label><input type="text" id="taxVat" readonly></div>
+      </div>
+      <div class="qtotal"><span class="ql">합계</span><span class="qv" id="taxTotal">₩ 0</span></div>
+      <div class="plain" style="margin-top:16px"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+        <span><b>팝빌 API 연동</b>으로 실제 국세청 전자세금계산서가 자동 발행되는 화면입니다. (연동은 3단계 개발 예정)</span></div>
+      <div class="btnrow" style="margin-top:16px;margin-bottom:0">
+        <button class="btn primary" id="taxIssueBtn">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M20 6 9 17l-5-5"/></svg>
+          발행하기
+        </button>
+        <span class="badge2" id="taxIssuedBadge" style="display:none">
+          <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>발행 완료</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var mq=window.matchMedia('(prefers-color-scheme: dark)');
+  function syncTheme(){
+    var t=root.getAttribute('data-theme');
+    if(!t){ /* follow system */ }
+  }
+  document.getElementById('themeBtn').addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme');
+    var sysDark=mq.matches;
+    var nowDark = cur? cur==='dark' : sysDark;
+    root.setAttribute('data-theme', nowDark? 'light':'dark');
+  });
+
+  var ICONS={
+    contract:'<svg viewBox="0 0 24 24" class="ico"><path d="M6 2h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1ZM14 2v5h5M9 13h6M9 17h4"/></svg>',
+    quote:'<svg viewBox="0 0 24 24" class="ico"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/><path d="M9 8h6M9 12h6"/></svg>',
+    meeting:'<svg viewBox="0 0 24 24" class="ico"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M8 2v4M16 2v4M3 9h18"/></svg>',
+    invoice:'<svg viewBox="0 0 24 24" class="ico"><path d="M4 20V4M4 20h16M8 16v-4M12 16V9M16 16v-6"/></svg>',
+    tax:'<svg viewBox="0 0 24 24" class="ico"><path d="M12 2 3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6Z"/></svg>',
+    deliverable:'<svg viewBox="0 0 24 24" class="ico"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21.5 7v10l-6-3.5"/></svg>'
+  };
+  var ICON_TONE={contract:'signal',quote:'good',meeting:'violet',invoice:'amber',tax:'brand',deliverable:'signal'};
+
+  var PROJECTS=[
+    {
+      id:'hanwha', name:'한화리조트', category:'레저·리조트 · 바이럴영상', initial:'한', tone:'amber', type:'video',
+      progress:62, dday:'D-2', status:'run',
+      stages:['기획','소재수집·촬영','편집','내부검수','고객사컨펌','최종납품'],
+      cards:[
+        {t:'7월 바이럴 #2', stage:1, urgent:true},
+        {t:'릴스 #14', stage:4, approve:true},
+        {t:'릴스 #13', stage:5, finished:true},
+        {t:'릴스 #15', stage:0}
+      ],
+      docs:[
+        {n:'계약서_2026.pdf', type:'contract', date:'2026-01-08', who:'대표'},
+        {n:'견적서_2026-06.pdf', type:'quote', date:'2026-06-02', who:'이보석'},
+        {n:'미팅록_0620.pdf', type:'meeting', date:'2026-06-20', who:'대표'},
+        {n:'인보이스_07월.pdf', type:'invoice', date:'2026-07-01', who:'이보석'},
+        {n:'릴스13_최종납품.mp4', type:'deliverable', date:'2026-07-08', who:'이보석'}
+      ]
+    },
+    {
+      id:'seongwon', name:'성원시스템', category:'B2B 시스템 · 랜딩페이지', initial:'성', tone:'signal', type:'landing',
+      progress:80, dday:'D-1', status:'wait',
+      stages:['기획(와이어프레임)','디자인시안','퍼블리싱/개발','내부QA','고객사컨펌','오픈'],
+      cards:[
+        {t:'리뉴얼 랜딩페이지', stage:4, approve:true}
+      ],
+      docs:[
+        {n:'계약서_2026.pdf', type:'contract', date:'2026-03-15', who:'대표'},
+        {n:'견적서_2026-03.pdf', type:'quote', date:'2026-03-10', who:'이보석'},
+        {n:'미팅록_0705.pdf', type:'meeting', date:'2026-07-05', who:'대표'}
+      ]
+    },
+    {
+      id:'logiroi', name:'로지로이', category:'물류 · SNS 운영(월간)', initial:'로', tone:'violet', type:'sns',
+      progress:45, dday:'상시', status:'run',
+      snsItems:[
+        {date:'7/10', title:'카드뉴스 · 여름철 물류안내', status:'발행완료'},
+        {date:'7/12', title:'릴스 · 대표 인터뷰', status:'제작중'},
+        {date:'7/15', title:'릴스 · 이벤트 안내', status:'발행대기', approve:true}
+      ],
+      docs:[
+        {n:'계약서_2026.pdf', type:'contract', date:'2026-02-01', who:'대표'},
+        {n:'견적서_2026-02.pdf', type:'quote', date:'2026-02-01', who:'이보석'},
+        {n:'세금계산서_07월.pdf', type:'tax', date:'2026-07-02', who:'이보석'}
+      ]
+    },
+    {
+      id:'saemyu', name:'새뮤', category:'브랜드 · 바이럴영상', initial:'새', tone:'good', type:'video',
+      progress:38, dday:'D-5', status:'run',
+      stages:['기획','소재수집·촬영','편집','내부검수','고객사컨펌','최종납품'],
+      cards:[
+        {t:'브랜드 바이럴 #1', stage:0},
+        {t:'제품 소개 릴스', stage:2, urgent:true}
+      ],
+      docs:[
+        {n:'계약서_2026.pdf', type:'contract', date:'2026-05-10', who:'대표'},
+        {n:'견적서_2026-05.pdf', type:'quote', date:'2026-05-08', who:'이보석'}
+      ]
+    },
+    {
+      id:'yeda', name:'예다', category:'교육기관 사진업 · SNS 운영(월간)', initial:'예', tone:'brand', type:'sns',
+      progress:70, dday:'상시', status:'go',
+      snsItems:[
+        {date:'7/09', title:'카드뉴스 · 여름 활동앨범 안내', status:'발행완료'},
+        {date:'7/14', title:'릴스 · 촬영현장 브이로그', status:'발행대기', approve:true}
+      ],
+      docs:[
+        {n:'계약서_2026.pdf', type:'contract', date:'2026-01-02', who:'대표'},
+        {n:'견적서_2026-01.pdf', type:'quote', date:'2026-01-02', who:'이보석'}
+      ]
+    },
+    {
+      id:'littleprince', name:'리틀프린스부산', category:'키즈 프랜차이즈 · 랜딩페이지', initial:'리', tone:'amber', type:'landing',
+      progress:20, dday:'D-9', status:'run',
+      stages:['기획(와이어프레임)','디자인시안','퍼블리싱/개발','내부QA','고객사컨펌','오픈'],
+      cards:[
+        {t:'지점 소개 랜딩페이지', stage:1}
+      ],
+      docs:[
+        {n:'계약서_2026.pdf', type:'contract', date:'2026-06-20', who:'대표'},
+        {n:'견적서_2026-06.pdf', type:'quote', date:'2026-06-18', who:'이보석'}
+      ]
+    }
+  ];
+
+  var CRM_LEADS=[
+    {stage:'리드', name:'H사', cat:'헤어샵 · 문의 접수'},
+    {stage:'미팅중', name:'N사', cat:'이커머스 · 2차 미팅 예정'},
+    {stage:'견적발송', name:'D사', cat:'디저트카페 · 견적서 검토중'},
+    {stage:'계약중', name:'Q사', cat:'뷰티 · 계약서 서명 대기'},
+    {stage:'진행중', name:'성원시스템 외 5곳', cat:'프로젝트 화면에서 추적'},
+    {stage:'종료', name:'P사', cat:'뷰티 · 2026.03 계약 종료'}
+  ];
+  var CONTENT_QUEUE=[
+    {n:'S사 · 릴스 #15 초안', type:'deliverable', date:'AI 생성 · 07-12', who:'감수대기'},
+    {n:'B사 · 카드뉴스 초안 2건', type:'deliverable', date:'AI 생성 · 07-11', who:'감수대기'},
+    {n:'B사 · 7/15 릴스 발행', type:'deliverable', date:'감수완료 · 07-10', who:'대표승인대기'},
+    {n:'S사 · 7월 바이럴 대본안', type:'deliverable', date:'AI 생성 · 07-09', who:'감수대기'}
+  ];
+
+  var role='operator';
+  var currentProject=null;
+
+  function toneVars(tone){
+    var map={amber:'var(--amber)',signal:'var(--signal)',violet:'var(--violet)',good:'var(--good)',brand:'var(--brand)'};
+    var soft={amber:'var(--amber-soft)',signal:'var(--signal-soft)',violet:'var(--violet-soft)',good:'var(--good-soft)',brand:'var(--signal-soft)'};
+    return {c:map[tone]||map.signal, bg:soft[tone]||soft.signal};
+  }
+
+  function projectCardsHTML(){
+    return PROJECTS.map(function(p){
+      var tv=toneVars(p.tone);
+      var pill = p.status==='wait' ? '<span class="pill wait">고객사컨펌 대기</span>' : (p.status==='go'?'<span class="pill go">순항</span>':'<span class="pill run">진행중</span>');
+      return '<button class="pcard" data-open-project="'+p.id+'">'+
+        '<div class="ph"><div class="pav" style="background:'+tv.bg+';color:'+tv.c+'">'+p.initial+'</div>'+
+        '<div><div class="pn">'+p.name+'</div><div class="pc">'+p.category+'</div></div></div>'+
+        '<div class="prog2"><div class="prow"><span>진행률</span><b>'+p.progress+'%</b></div>'+
+        '<div class="track2"><div class="fill2" style="width:'+p.progress+'%"></div></div></div>'+
+        '<div class="pfoot">'+pill+'<span class="pill" style="color:var(--ink-faint);background:var(--surface-3)">'+p.dday+'</span></div>'+
+        '</button>';
+    }).join('');
+  }
+  function wireProjectCards(grid){
+    grid.querySelectorAll('[data-open-project]').forEach(function(btn){
+      btn.addEventListener('click',function(){ openProject(btn.getAttribute('data-open-project')); });
+    });
+  }
+  function renderDashboard(){
+    var grid=document.getElementById('pgrid');
+    grid.innerHTML=projectCardsHTML();
+    wireProjectCards(grid);
+    document.getElementById('dashProjCnt').textContent='고객사 '+PROJECTS.length+'곳';
+    document.getElementById('sumProjCnt').textContent=PROJECTS.length;
+  }
+  function renderProjectsFull(){
+    var grid=document.getElementById('pgridFull');
+    grid.innerHTML=projectCardsHTML();
+    wireProjectCards(grid);
+    document.getElementById('projCnt').textContent='고객사 '+PROJECTS.length+'곳';
+  }
+  function renderCRM(){
+    var host=document.getElementById('crmBoard');
+    document.getElementById('crmCnt').textContent='전체 '+CRM_LEADS.length+'건';
+    var stages=['리드','미팅중','견적발송','계약중','진행중','종료'];
+    host.innerHTML=stages.map(function(stage){
+      var items=CRM_LEADS.filter(function(l){return l.stage===stage});
+      return '<div class="kcol"><div class="kh">'+stage+'<span class="kn">'+items.length+'</span></div>'+
+        items.map(function(l){ return '<div class="crmcard"><div class="cn">'+l.name+'</div><div class="cc2">'+l.cat+'</div></div>'; }).join('')+
+        '</div>';
+    }).join('');
+  }
+  function renderContentQueue(){
+    document.getElementById('contentQueue').innerHTML=CONTENT_QUEUE.map(function(c){
+      var tv=toneVars('signal');
+      return '<div class="docrow"><div class="dic" style="background:'+tv.bg+';color:'+tv.c+'">'+ICONS.deliverable+'</div>'+
+        '<div class="dinfo"><div class="dn">'+c.n+'</div><div class="dm">'+c.date+'</div></div>'+
+        '<span class="dtag">'+c.who+'</span></div>';
+    }).join('');
+  }
+
+  function openProject(id){
+    currentProject=PROJECTS.filter(function(p){return p.id===id})[0];
+    goScreen('project', currentProject.name+' 프로젝트');
+    var tv=toneVars(currentProject.tone);
+    document.getElementById('pdHead').innerHTML=
+      '<div class="pav" style="background:'+tv.bg+';color:'+tv.c+'">'+currentProject.initial+'</div>'+
+      '<div><h2>'+currentProject.name+'</h2><div class="pdmeta">'+currentProject.category+' · 진행률 '+currentProject.progress+'%</div></div>';
+    renderProduction();
+    renderProjectDocs();
+    setTab('production');
+  }
+
+  function renderProduction(){
+    var host=document.getElementById('tabProduction');
+    var p=currentProject;
+    if(p.type==='sns'){
+      host.innerHTML='<div class="snslist">'+p.snsItems.map(function(it){
+        var pillClass = it.status==='발행완료'?'done':(it.status==='발행대기'?'wait':'run');
+        var appr = (it.approve && role==='ceo') ? '<div class="actions"><button class="btn sm ok">승인</button><button class="btn sm no">반려</button></div>' : (it.approve ? '<span class="rolelock"><svg viewBox="0 0 24 24"><path d="M12 15a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M6 10V7a6 6 0 0 1 12 0v3"/><rect x="5" y="10" width="14" height="10" rx="2"/></svg>대표 승인 대기</span>':'');
+        return '<div class="snsrow"><span class="sd">'+it.date+'</span><span class="st2">'+it.title+'</span><span class="pill '+pillClass+'">'+it.status+'</span>'+appr+'</div>';
+      }).join('')+'</div>';
+      return;
+    }
+    host.innerHTML='<div class="kanban">'+p.stages.map(function(stage,i){
+      var cards=p.cards.filter(function(c){return c.stage===i});
+      return '<div class="kcol"><div class="kh">'+stage+'<span class="kn">'+cards.length+'</span></div>'+
+        cards.map(function(c){
+          var cls=['kcard'];
+          if(c.urgent) cls.push('urgent');
+          if(c.finished) cls.push('finished');
+          if(c.approve) cls.push('approve');
+          var sub = c.finished? '완료' : (c.approve? (role==='ceo'?'승인 대기 · 액션 필요':'대표 승인 대기') : (c.urgent?'마감 임박':'진행중'));
+          var approveBtns = (c.approve && role==='ceo') ? '<div style="display:flex;gap:6px;margin-top:8px"><button class="btn sm ok">승인</button><button class="btn sm no">반려</button></div>' : '';
+          return '<div class="'+cls.join(' ')+'"><div class="kt">'+c.t+'</div><div class="kd">'+sub+'</div>'+approveBtns+'</div>';
+        }).join('')+
+        '</div>';
+    }).join('')+'</div>';
+  }
+
+  function docRow(d){
+    var tone=ICON_TONE[d.type]; var tv=toneVars(tone);
+    return '<div class="docrow"><div class="dic" style="background:'+tv.bg+';color:'+tv.c+'">'+ICONS[d.type]+'</div>'+
+      '<div class="dinfo"><div class="dn">'+d.n+'</div><div class="dm">'+d.date+' · 업로드 '+d.who+'</div></div>'+
+      '<span class="dtag">'+d.who+'</span></div>';
+  }
+
+  function renderProjectDocs(){
+    var host=document.getElementById('tabDocs');
+    var p=currentProject;
+    host.innerHTML='<div class="btnrow">'+
+      '<button class="btn primary" data-doc-upload><svg viewBox="0 0 24 24" class="ico"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>문서 업로드</button>'+
+      '<button class="btn" data-open-quote><svg viewBox="0 0 24 24" class="ico"><path d="M12 5v14M5 12h14"/></svg>견적서 작성</button>'+
+      '<button class="btn" data-open-tax><svg viewBox="0 0 24 24" class="ico"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/></svg>세금계산서 발행</button>'+
+      '</div><div class="doclist">'+p.docs.map(docRow).join('')+'</div>';
+    host.querySelector('[data-open-quote]').addEventListener('click',openQuoteModal);
+    host.querySelector('[data-open-tax]').addEventListener('click',openTaxModal);
+    host.querySelector('[data-doc-upload]').addEventListener('click',function(){alert('목업 화면입니다. 실제 업로드는 다음 개발 단계에서 연결됩니다.');});
+  }
+
+  function renderAllDocs(){
+    var all=[];
+    PROJECTS.forEach(function(p){ p.docs.forEach(function(d){ all.push(Object.assign({},d,{proj:p.name})); }); });
+    document.getElementById('allDocs').innerHTML=all.map(function(d){
+      var tone=ICON_TONE[d.type]; var tv=toneVars(tone);
+      return '<div class="docrow"><div class="dic" style="background:'+tv.bg+';color:'+tv.c+'">'+ICONS[d.type]+'</div>'+
+        '<div class="dinfo"><div class="dn">'+d.n+'</div><div class="dm">'+d.proj+' · '+d.date+' · 업로드 '+d.who+'</div></div>'+
+        '<span class="dtag">'+d.who+'</span></div>';
+    }).join('');
+    var head=document.querySelector('[data-screen="documents"] h2');
+    if(head) head.innerHTML='전체 문서 <span style="color:var(--ink-faint);font-weight:400;font-size:13px">('+all.length+')</span>';
+  }
+
+  function renderBilling(){
+    var quotes=[], taxes=[];
+    PROJECTS.forEach(function(p){
+      p.docs.forEach(function(d){
+        var row=docRow(Object.assign({},d,{n:p.name+' · '+d.n}));
+        if(d.type==='quote') quotes.push(row);
+        if(d.type==='tax') taxes.push(row);
+      });
+    });
+    document.getElementById('quoteList').innerHTML = quotes.join('') || '<div class="empty">아직 작성된 견적서가 없습니다.</div>';
+    document.getElementById('taxList').innerHTML = taxes.join('') || '<div class="empty">아직 발행된 세금계산서가 없습니다.</div>';
+    document.getElementById('quoteCnt').textContent = quotes.length+'건';
+    document.getElementById('taxCnt').textContent = taxes.length+'건';
+  }
+
+  function renderApprovals(){
+    var items=[];
+    PROJECTS.forEach(function(p){
+      if(p.type==='sns'){
+        p.snsItems.filter(function(i){return i.approve}).forEach(function(i){
+          items.push({proj:p.name,title:i.title+' · 발행 승인',sub:p.name+' · SNS 운영 · '+i.date, tone:p.tone, initial:p.initial});
+        });
+      } else if(p.cards){
+        p.cards.filter(function(c){return c.approve}).forEach(function(c){
+          items.push({proj:p.name,title:c.t+' · 고객사컨펌 직전 확인',sub:p.name+' · '+p.category, tone:p.tone, initial:p.initial});
+        });
+      }
+    });
+    var badge=items.length;
+    ['apprBadgeNav','apprBadgeBn'].forEach(function(id){ var e=document.getElementById(id); if(e) e.textContent=badge; });
+    document.getElementById('apprCount').textContent=badge+'건';
+    document.getElementById('apprHint').innerHTML = role==='ceo' ?
+      '<svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>대표님 화면입니다. 아래 항목을 확인하고 <b>승인 또는 반려</b>만 누르시면 됩니다.</span>' :
+      '<svg viewBox="0 0 24 24"><path d="M12 15a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M6 10V7a6 6 0 0 1 12 0v3"/><rect x="5" y="10" width="14" height="10" rx="2"/></svg><span>이보석님 화면에서는 승인 요청 현황만 조회됩니다. 실제 승인은 대표님 화면에서 이뤄집니다.</span>';
+    document.getElementById('apprList').innerHTML = items.length ? items.map(function(it){
+      var actions = role==='ceo' ?
+        '<div class="aactions"><button class="btn ok">승인</button><button class="btn no">반려</button></div>' :
+        '<span class="rolelock"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>대표 승인 대기중</span>';
+      return '<div class="apprrow"><div class="aic"><svg viewBox="0 0 24 24" class="ico"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>'+
+        '<div class="ainfo"><div class="at">'+it.title+'</div><div class="as">'+it.sub+'</div></div>'+actions+'</div>';
+    }).join('') : '<div class="empty">지금은 승인 대기 항목이 없습니다.</div>';
+  }
+
+  function setTab(name){
+    document.querySelectorAll('.tabs .tab').forEach(function(t){ t.classList.toggle('active', t.getAttribute('data-tab')===name); });
+    document.getElementById('tabProduction').style.display = name==='production'?'block':'none';
+    document.getElementById('tabDocs').style.display = name==='docs'?'block':'none';
+  }
+  document.querySelectorAll('.tabs .tab').forEach(function(t){
+    t.addEventListener('click',function(){ setTab(t.getAttribute('data-tab')); });
+  });
+
+  function goScreen(name,title,crumb){
+    document.querySelectorAll('.screen').forEach(function(s){ s.classList.toggle('show', s.getAttribute('data-screen')===name); });
+    document.getElementById('screenTitle').textContent=title;
+    document.getElementById('backBtn').hidden = name!=='project';
+    var highlightAs = name==='project' ? 'projects' : name;
+    document.querySelectorAll('.navitem').forEach(function(n){ n.classList.toggle('active', n.getAttribute('data-nav')===highlightAs); });
+    document.querySelectorAll('.bnitem').forEach(function(n){ n.classList.toggle('active', n.getAttribute('data-nav')===highlightAs); });
+    if(name==='crm') renderCRM();
+    if(name==='projects') renderProjectsFull();
+    if(name==='documents') renderAllDocs();
+    if(name==='content') renderContentQueue();
+    if(name==='billing') renderBilling();
+    if(name==='approvals') renderApprovals();
+    window.scrollTo({top:0,behavior:'auto'});
+  }
+
+  document.querySelectorAll('[data-nav]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var target=btn.getAttribute('data-nav');
+      var titles={dashboard:'대시보드',crm:'고객사',projects:'프로젝트',documents:'문서함',content:'콘텐츠 자동화',ads:'광고성과',billing:'견적 · 세금계산서',approvals:'승인함'};
+      goScreen(target, titles[target]);
+    });
+  });
+  document.getElementById('backBtn').addEventListener('click',function(){ goScreen('dashboard','대시보드'); });
+
+  // role toggle
+  document.querySelectorAll('.roletoggle button').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      role=btn.getAttribute('data-role');
+      document.querySelectorAll('.roletoggle button').forEach(function(b){ b.classList.toggle('on', b===btn); });
+      document.getElementById('roleDesc').textContent = role==='ceo' ? '대표 · 영업총괄 — 조회 + 승인 권한' : '운영총괄 — 전체 편집 권한';
+      if(currentProject) renderProduction();
+      if(document.querySelector('[data-screen="approvals"]').classList.contains('show')) renderApprovals();
+    });
+  });
+
+  // kakao drawer
+  var scrim=document.getElementById('scrim'), drawer=document.getElementById('kakaoDrawer');
+  function openDrawer(){ drawer.classList.add('show'); scrim.classList.add('show'); }
+  function closeDrawer(){ drawer.classList.remove('show'); scrim.classList.remove('show'); }
+  document.getElementById('bellBtn').addEventListener('click',openDrawer);
+  document.getElementById('closeDrawer').addEventListener('click',closeDrawer);
+  scrim.addEventListener('click',function(){ closeDrawer(); closeModals(); });
+
+  // modals
+  function closeModals(){ document.querySelectorAll('.modal').forEach(function(m){ m.classList.remove('show'); }); }
+  document.querySelectorAll('[data-close-modal]').forEach(function(b){ b.addEventListener('click',closeModals); });
+
+  var qtRows=[{n:'바이럴 영상 기획·연출',q:1,p:1800000},{n:'촬영 (1일)',q:1,p:900000},{n:'편집 및 후반작업',q:1,p:1200000}];
+  function fmt(n){ return '₩ '+n.toLocaleString('ko-KR'); }
+  function renderQuoteTable(){
+    var body=document.getElementById('qtBody');
+    body.innerHTML=qtRows.map(function(r,i){
+      return '<tr><td><input value="'+r.n+'" data-qi="'+i+'" data-qf="n"></td>'+
+        '<td><input value="'+r.q+'" data-qi="'+i+'" data-qf="q" style="text-align:center"></td>'+
+        '<td><input value="'+r.p+'" data-qi="'+i+'" data-qf="p"></td>'+
+        '<td>'+fmt(r.q*r.p)+'</td></tr>';
+    }).join('');
+    body.querySelectorAll('input').forEach(function(inp){
+      inp.addEventListener('input',function(){
+        var i=+inp.getAttribute('data-qi'), f=inp.getAttribute('data-qf');
+        qtRows[i][f] = f==='n' ? inp.value : (+inp.value.replace(/[^0-9]/g,'')||0);
+        renderQuoteTable();
+      });
+    });
+    var total=qtRows.reduce(function(s,r){return s+r.q*r.p;},0);
+    document.getElementById('qtTotal').textContent=fmt(total);
+  }
+  document.getElementById('addQuoteRow').addEventListener('click',function(){
+    qtRows.push({n:'신규 항목',q:1,p:0}); renderQuoteTable();
+  });
+  function openQuoteModal(){ renderQuoteTable(); document.getElementById('quoteModal').classList.add('show'); scrim.classList.add('show'); }
+  document.getElementById('openQuoteBtn').addEventListener('click',openQuoteModal);
+  document.getElementById('quotePreviewBtn').addEventListener('click',function(){
+    alert('PDF 미리보기 화면입니다 (목업). 실제 PDF 생성은 다음 개발 단계에서 지원됩니다.');
+  });
+
+  function openTaxModal(){ document.getElementById('taxModal').classList.add('show'); scrim.classList.add('show'); computeTax(); document.getElementById('taxIssuedBadge').style.display='none'; document.getElementById('taxIssueBtn').disabled=false; }
+  document.getElementById('openTaxBtn').addEventListener('click',openTaxModal);
+  function computeTax(){
+    var supply=+document.getElementById('taxSupply').value.replace(/[^0-9]/g,'')||0;
+    var vat=Math.round(supply*0.1);
+    document.getElementById('taxVat').value=vat.toLocaleString('ko-KR');
+    document.getElementById('taxTotal').textContent=fmt(supply+vat);
+  }
+  document.getElementById('taxSupply').addEventListener('input',computeTax);
+  document.getElementById('taxIssueBtn').addEventListener('click',function(){
+    document.getElementById('taxIssuedBadge').style.display='inline-flex';
+    this.disabled=true;
+  });
+
+  function populateClientSelects(){
+    var opts=PROJECTS.map(function(p){ return '<option>'+p.name+' · '+p.category.split(' · ')[0]+'</option>'; }).join('');
+    document.getElementById('quoteClient').innerHTML=opts;
+    document.getElementById('taxClient').innerHTML=opts;
+  }
+  populateClientSelects();
+  renderDashboard();
+})();
+</script>
