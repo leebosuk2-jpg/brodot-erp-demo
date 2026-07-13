@@ -186,6 +186,11 @@
 
   /* doc list */
   .doclist{display:flex;flex-direction:column;gap:8px}
+  .docgroups{display:flex;flex-direction:column;gap:24px}
+  .docgroup-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .docgroup-head .dgav{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-size:12px;font-weight:800;flex:none}
+  .docgroup-head .dgname{font-size:13.5px;font-weight:800}
+  .docgroup-head .dgcnt{font-size:11px;color:var(--ink-faint);font-family:var(--font-mono)}
   .docrow{display:flex;align-items:center;gap:13px;padding:13px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface);flex-wrap:wrap}
   .docrow .dic{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;flex:none}
   .docrow .dic svg{width:17px;height:17px}
@@ -725,11 +730,11 @@
     {
       id:'hanwha', name:'한화리조트', category:'레저·리조트 · 바이럴영상', initial:'한', tone:'amber', type:'video',
       progress:62, dday:'D-2', status:'run',
-      stages:['기획','소재수집·촬영','편집','내부검수','고객사컨펌','최종납품'],
+      stages:['기획','소재수집·촬영','편집','내부검수','최종납품'],
       cards:[
         {t:'7월 바이럴 #2', stage:1, urgent:true},
         {t:'릴스 #14', stage:4, approve:true},
-        {t:'릴스 #13', stage:5, finished:true},
+        {t:'릴스 #13', stage:4, finished:true},
         {t:'릴스 #15', stage:0}
       ],
       schedule:[
@@ -749,7 +754,7 @@
     {
       id:'seongwon', name:'성원시스템', category:'B2B 시스템 · 랜딩페이지', initial:'성', tone:'signal', type:'landing',
       progress:80, dday:'D-1', status:'wait',
-      stages:['기획(와이어프레임)','디자인시안','퍼블리싱/개발','내부QA','고객사컨펌','오픈'],
+      stages:['기획(와이어프레임)','디자인시안','퍼블리싱/개발','내부QA','오픈'],
       cards:[
         {t:'리뉴얼 랜딩페이지', stage:4, approve:true}
       ],
@@ -784,7 +789,7 @@
     {
       id:'saemyu', name:'새뮤', category:'브랜드 · 바이럴영상', initial:'새', tone:'good', type:'video',
       progress:38, dday:'D-5', status:'run',
-      stages:['기획','소재수집·촬영','편집','내부검수','고객사컨펌','최종납품'],
+      stages:['기획','소재수집·촬영','편집','내부검수','최종납품'],
       cards:[
         {t:'브랜드 바이럴 #1', stage:0},
         {t:'제품 소개 릴스', stage:2, urgent:true}
@@ -815,7 +820,7 @@
     {
       id:'littleprince', name:'리틀프린스부산', category:'키즈 프랜차이즈 · 랜딩페이지', initial:'리', tone:'amber', type:'landing',
       progress:20, dday:'D-9', status:'run',
-      stages:['기획(와이어프레임)','디자인시안','퍼블리싱/개발','내부QA','고객사컨펌','오픈'],
+      stages:['기획(와이어프레임)','디자인시안','퍼블리싱/개발','내부QA','오픈'],
       cards:[
         {t:'지점 소개 랜딩페이지', stage:1}
       ],
@@ -978,14 +983,14 @@
     });
   }
 
-  function docRow(d, idx, projLabel){
+  function docRow(d, idx){
     var tone=ICON_TONE[d.type]; var tv=toneVars(tone);
     var cls = d.previewType ? 'docrow previewable' : 'docrow';
     var idxAttr = (d.previewType && idx!=null) ? ' data-preview-idx="'+idx+'"' : '';
     var icon = d.previewType ?
       '<div class="dplay"><svg viewBox="0 0 24 24" class="ico"><path d="M8 5v14l11-7Z"/></svg></div>' :
       '<div class="dic" style="background:'+tv.bg+';color:'+tv.c+'">'+ICONS[d.type]+'</div>';
-    var meta = (projLabel? projLabel+' · ' : '')+d.date+' · 업로드 '+d.who;
+    var meta = d.date+' · 업로드 '+d.who;
     return '<div class="'+cls+'"'+idxAttr+'>'+icon+
       '<div class="dinfo"><div class="dn">'+d.n+'</div><div class="dm">'+meta+'</div></div>'+
       '<span class="dtag">'+d.who+'</span></div>';
@@ -1026,15 +1031,25 @@
   }
 
   function renderAllDocs(){
-    var all=[];
-    PROJECTS.forEach(function(p){ p.docs.forEach(function(d){ all.push(Object.assign({},d,{proj:p.name})); }); });
     var host=document.getElementById('allDocs');
-    host.innerHTML=all.map(function(d,i){return docRow(d,i,d.proj);}).join('');
-    host.querySelectorAll('[data-preview-idx]').forEach(function(el){
-      el.addEventListener('click',function(){ openPreview(all[+el.getAttribute('data-preview-idx')]); });
+    var groups=PROJECTS.filter(function(p){return p.docs.length});
+    var totalCount=0;
+    host.innerHTML='<div class="docgroups">'+groups.map(function(p){
+      totalCount+=p.docs.length;
+      var tv=toneVars(p.tone);
+      return '<div class="docgroup"><div class="docgroup-head">'+
+        '<span class="dgav" style="background:'+tv.bg+';color:'+tv.c+'">'+p.initial+'</span>'+
+        '<span class="dgname">'+p.name+'</span><span class="dgcnt">'+p.docs.length+'건</span></div>'+
+        '<div class="doclist">'+p.docs.map(function(d,i){return docRow(d,i);}).join('')+'</div></div>';
+    }).join('')+'</div>';
+    host.querySelectorAll('.docgroup').forEach(function(groupEl, gi){
+      var p=groups[gi];
+      groupEl.querySelectorAll('[data-preview-idx]').forEach(function(el){
+        el.addEventListener('click',function(){ openPreview(p.docs[+el.getAttribute('data-preview-idx')]); });
+      });
     });
     var head=document.querySelector('[data-screen="documents"] h2');
-    if(head) head.innerHTML='전체 문서 <span style="color:var(--ink-faint);font-weight:400;font-size:13px">('+all.length+')</span>';
+    if(head) head.innerHTML='전체 문서 <span style="color:var(--ink-faint);font-weight:400;font-size:13px">('+totalCount+')</span>';
   }
 
   function renderBilling(){
@@ -1067,7 +1082,7 @@
         });
       } else if(p.cards){
         p.cards.filter(function(c){return c.approve}).forEach(function(c){
-          items.push({proj:p.name,title:c.t+' · 고객사컨펌 직전 확인',sub:p.name+' · '+p.category, tone:p.tone, initial:p.initial, ref:c});
+          items.push({proj:p.name,title:c.t+' · 대표 확인 요청',sub:p.name+' · '+p.category, tone:p.tone, initial:p.initial, ref:c});
         });
       }
     });
