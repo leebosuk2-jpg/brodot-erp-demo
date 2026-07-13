@@ -299,6 +299,15 @@
     display:grid;place-items:center;color:var(--ink-dim);flex:none}
   .modal-close svg{width:15px;height:15px}
 
+  .metarows{border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface);padding:4px 16px}
+  .metarows .brow{display:flex;gap:14px;padding:11px 0;border-top:1px solid var(--line);font-size:13px;line-height:1.6}
+  .metarows .brow:first-child{border-top:0}
+  .metarows .bk{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);flex:none;width:70px;padding-top:2px}
+  .metarows .bv{color:var(--ink-dim)}
+  .metarows .bv b{color:var(--ink)}
+  .crmcard.clickable{cursor:pointer}
+  .crmcard.clickable:hover{border-color:var(--line-strong);background:var(--surface-2)}
+
   .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
   .field label{font-size:12px;color:var(--ink-faint);font-weight:600}
   .field input,.field select{background:var(--surface-2);border:1px solid var(--line-strong);border-radius:var(--r-xs);
@@ -483,6 +492,15 @@
         <div class="kanban" id="crmBoard" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))"></div>
       </section>
 
+      <!-- ================= LEAD DETAIL (CRM 고객사별 상세) ================= -->
+      <section class="screen" data-screen="leaddetail">
+        <div class="pdhead" id="leadHead"></div>
+        <div class="metarows" id="leadMeta"></div>
+        <div style="margin-top:16px" id="leadActions"></div>
+        <div class="sechead" style="margin-top:24px"><h2>진행 기록</h2></div>
+        <div class="snslist" id="leadHistory"></div>
+      </section>
+
       <!-- ================= PROJECTS (전체 목록) ================= -->
       <section class="screen" data-screen="projects">
         <div class="sechead"><h2>전체 프로젝트</h2><span class="cnt" id="projCnt"></span></div>
@@ -532,8 +550,8 @@
           <div class="wfarrow"><svg viewBox="0 0 24 24" class="ico"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
           <div class="wfstep ai">AI · 예약 발행</div>
         </div>
-        <div class="sechead"><h2>AI 초안 · 감수 대기열</h2><span class="cnt">4건</span></div>
-        <div class="doclist" id="contentQueue"></div>
+        <div class="sechead"><h2>AI 초안 · 감수 대기열</h2><span class="cnt" id="contentQueueCnt"></span></div>
+        <div id="contentQueue"></div>
       </section>
 
       <!-- ================= AD PERFORMANCE ================= -->
@@ -836,19 +854,28 @@
     }
   ];
 
+  var CRM_STAGES=['리드','미팅중','견적발송','계약중','진행중','종료'];
   var CRM_LEADS=[
-    {stage:'리드', name:'H사', cat:'헤어샵 · 문의 접수'},
-    {stage:'미팅중', name:'N사', cat:'이커머스 · 2차 미팅 예정'},
-    {stage:'견적발송', name:'D사', cat:'디저트카페 · 견적서 검토중'},
-    {stage:'계약중', name:'Q사', cat:'뷰티 · 계약서 서명 대기'},
-    {stage:'진행중', name:'성원시스템 외 5곳', cat:'프로젝트 화면에서 추적'},
-    {stage:'종료', name:'P사', cat:'뷰티 · 2026.03 계약 종료'}
+    {stage:'리드', name:'H사', cat:'헤어샵 · 문의 접수', source:'인스타그램 DM', contact:'010-••••-1234 · 담당 원장', note:'헤어샵 오픈 1주년 기념 SNS 릴스 문의. 예산대 미정, 견적 먼저 요청.',
+      history:[{date:'07/11', text:'인스타 DM으로 첫 문의 접수'}]},
+    {stage:'미팅중', name:'N사', cat:'이커머스 · 2차 미팅 예정', source:'홈페이지 문의폼', contact:'010-••••-5678 · 마케팅팀장', note:'랜딩페이지 리뉴얼 + 광고 세팅 패키지 관심. 1차 미팅 후 견적 조율 중.',
+      history:[{date:'07/03', text:'홈페이지 문의폼 접수'},{date:'07/08', text:'1차 미팅 진행 — 요구사항 정리'},{date:'07/16', text:'2차 미팅 예정'}]},
+    {stage:'견적발송', name:'D사', cat:'디저트카페 · 견적서 검토중', source:'지인 소개', contact:'010-••••-9012 · 대표', note:'카드뉴스 월 8건 + 릴스 월 2건 패키지 견적 발송함. 내부 검토중.',
+      history:[{date:'06/28', text:'지인 소개로 연결'},{date:'07/05', text:'견적서 발송 완료'}]},
+    {stage:'계약중', name:'Q사', cat:'뷰티 · 계약서 서명 대기', source:'네이버 검색광고', contact:'010-••••-3456 · 대표', note:'계약 조건 협의 완료, 서명만 남음. 서명 완료 시 자동으로 프로젝트가 생성됩니다.',
+      history:[{date:'06/20', text:'네이버 검색광고 통해 유입'},{date:'07/02', text:'견적 협의 완료'},{date:'07/10', text:'계약서 발송, 서명 대기중'}]},
+    {stage:'진행중', name:'성원시스템 외 5곳', cat:'프로젝트 화면에서 추적', linkToProjects:true},
+    {stage:'종료', name:'P사', cat:'뷰티 · 2026.03 계약 종료', source:'카카오톡 채널', contact:'010-••••-7890 · 실장', note:'6개월 계약 만료 후 재계약 미진행. 필요 시 재문의 예정.',
+      history:[{date:'2025/09', text:'카카오톡 채널 문의'},{date:'2025/10', text:'계약 체결'},{date:'2026/03', text:'계약 종료'}]}
   ];
   var CONTENT_QUEUE=[
-    {n:'S사 · 릴스 #15 초안', type:'deliverable', date:'AI 생성 · 07-12', who:'감수대기'},
-    {n:'B사 · 카드뉴스 초안 2건', type:'deliverable', date:'AI 생성 · 07-11', who:'감수대기'},
-    {n:'B사 · 7/15 릴스 발행', type:'deliverable', date:'감수완료 · 07-10', who:'대표확인대기'},
-    {n:'S사 · 7월 바이럴 대본안', type:'deliverable', date:'AI 생성 · 07-09', who:'감수대기'}
+    {client:'한화리조트', title:'릴스 #15 초안', stage:'감수대기', date:'AI 생성 · 07-12',
+      previewText:'[한화리조트] 여름 성수기, 지금이 딱! 🏖️\n\n가족과 함께하는 물놀이 패키지 특가 안내\n\n✔ 워터파크 자유이용권 포함\n✔ 스탠다드룸 2박 기준\n✔ 8/31까지 한정 특가\n\n지금 예약하고 여름을 특별하게 보내세요.'},
+    {client:'로지로이', title:'카드뉴스 초안 2건', stage:'감수대기', date:'AI 생성 · 07-11',
+      previewText:'[로지로이] 7월 셋째주 배송 안내\n\n폭염 대비 냉장 전용 차량 증차 운영 중입니다.\n신선식품 배송 시 온도 유지에 더욱 신경쓰고 있습니다.'},
+    {client:'로지로이', title:'7/15 릴스 발행', stage:'발행확인대기', date:'감수완료 · 07-10'},
+    {client:'한화리조트', title:'7월 바이럴 대본안', stage:'감수대기', date:'AI 생성 · 07-09',
+      previewText:'[씬 구성안]\n1. 오프닝(0-3초): 워터파크 슬라이드 하강 시점, 강렬한 후킹\n2. 본문(3-15초): 객실·조식·부대시설 빠른 컷 편집\n3. 클로징(15-20초): 예약 CTA 자막 + 로고'}
   ];
   var AD_ROWS=[
     {client:'한화리조트', channel:'메타 광고', spend:'₩ 3.2M', conv:'128', roas:'5.1배', roasClass:'roas-good', source:'광고로그'},
@@ -906,21 +933,84 @@
   function renderCRM(){
     var host=document.getElementById('crmBoard');
     document.getElementById('crmCnt').textContent='전체 '+CRM_LEADS.length+'건';
-    var stages=['리드','미팅중','견적발송','계약중','진행중','종료'];
-    host.innerHTML=stages.map(function(stage){
+    host.innerHTML=CRM_STAGES.map(function(stage){
       var items=CRM_LEADS.filter(function(l){return l.stage===stage});
       return '<div class="kcol"><div class="kh">'+stage+'<span class="kn">'+items.length+'</span></div>'+
-        items.map(function(l){ return '<div class="crmcard"><div class="cn">'+l.name+'</div><div class="cc2">'+l.cat+'</div></div>'; }).join('')+
+        items.map(function(l){
+          var idx=CRM_LEADS.indexOf(l);
+          return '<div class="crmcard clickable" data-lead-idx="'+idx+'"><div class="cn">'+l.name+'</div><div class="cc2">'+l.cat+'</div></div>';
+        }).join('')+
         '</div>';
     }).join('');
+    host.querySelectorAll('[data-lead-idx]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var lead=CRM_LEADS[+el.getAttribute('data-lead-idx')];
+        if(lead.linkToProjects){ goScreen('projects','프로젝트'); return; }
+        openLead(lead);
+      });
+    });
   }
+
+  function openLead(lead){
+    backTarget={name:'crm', title:'고객사'};
+    goScreen('leaddetail', lead.name+' · 리드 상세');
+    var tv=toneVars('signal');
+    var stageIdx=CRM_STAGES.indexOf(lead.stage);
+    var nextStage=CRM_STAGES[stageIdx+1];
+    document.getElementById('leadHead').innerHTML=
+      '<div class="pav" style="background:'+tv.bg+';color:'+tv.c+'">'+lead.name.charAt(0)+'</div>'+
+      '<div><h2>'+lead.name+'</h2><div class="pdmeta">'+lead.cat+'</div></div>';
+    document.getElementById('leadMeta').innerHTML=
+      '<div class="brow"><span class="bk">현재 단계</span><span class="bv"><b>'+lead.stage+'</b></span></div>'+
+      '<div class="brow"><span class="bk">유입경로</span><span class="bv">'+(lead.source||'-')+'</span></div>'+
+      '<div class="brow"><span class="bk">담당자</span><span class="bv">'+(lead.contact||'-')+'</span></div>'+
+      '<div class="brow"><span class="bk">메모</span><span class="bv">'+(lead.note||'-')+'</span></div>';
+    var nextBtn = nextStage ? '<button class="btn primary edit-only" id="leadNextBtn">다음 단계로 · '+nextStage+'</button>' : '<span class="pill done">최종 단계</span>';
+    document.getElementById('leadActions').innerHTML=nextBtn;
+    var btn=document.getElementById('leadNextBtn');
+    if(btn) btn.addEventListener('click',function(){
+      lead.stage=nextStage;
+      if(nextStage==='진행중') alert('실제 연동 시 이 시점에 프로젝트가 자동 생성됩니다. (지금은 목업이라 CRM 상태만 이동합니다)');
+      openLead(lead);
+    });
+    document.getElementById('leadHistory').innerHTML=(lead.history||[]).map(function(h){
+      return '<div class="snsrow"><span class="sd">'+h.date+'</span><span class="st2">'+h.text+'</span></div>';
+    }).join('') || '<div class="empty">기록이 없습니다.</div>';
+    applyRoleGating();
+  }
+  function contentStagePill(stage){ return stage==='발행확인대기' ? 'run' : 'wait'; }
+
   function renderContentQueue(){
-    document.getElementById('contentQueue').innerHTML=CONTENT_QUEUE.map(function(c){
-      var tv=toneVars('signal');
-      return '<div class="docrow"><div class="dic" style="background:'+tv.bg+';color:'+tv.c+'">'+ICONS.deliverable+'</div>'+
-        '<div class="dinfo"><div class="dn">'+c.n+'</div><div class="dm">'+c.date+'</div></div>'+
-        '<span class="dtag">'+c.who+'</span></div>';
-    }).join('');
+    var host=document.getElementById('contentQueue');
+    var clients=[];
+    CONTENT_QUEUE.forEach(function(c){ if(clients.indexOf(c.client)===-1) clients.push(c.client); });
+    var tvSignal=toneVars('signal');
+    host.innerHTML='<div class="docgroups">'+clients.map(function(clientName){
+      var proj=PROJECTS.filter(function(p){return p.name===clientName;})[0];
+      var tv=proj?toneVars(proj.tone):tvSignal;
+      var items=CONTENT_QUEUE.filter(function(c){return c.client===clientName;});
+      return '<div class="docgroup"><div class="docgroup-head">'+
+        '<span class="dgav" style="background:'+tv.bg+';color:'+tv.c+'">'+(proj?proj.initial:clientName.charAt(0))+'</span>'+
+        '<span class="dgname">'+clientName+'</span><span class="dgcnt">'+items.length+'건</span></div>'+
+        '<div class="doclist">'+items.map(function(c){
+          var idx=CONTENT_QUEUE.indexOf(c);
+          var cls = c.previewText ? 'docrow previewable' : 'docrow';
+          var idxAttr = c.previewText ? ' data-cq-idx="'+idx+'"' : '';
+          var icon = c.previewText ?
+            '<div class="dplay"><svg viewBox="0 0 24 24" class="ico"><path d="M8 5v14l11-7Z"/></svg></div>' :
+            '<div class="dic" style="background:'+tvSignal.bg+';color:'+tvSignal.c+'">'+ICONS.deliverable+'</div>';
+          return '<div class="'+cls+'"'+idxAttr+'>'+icon+
+            '<div class="dinfo"><div class="dn">'+c.title+'</div><div class="dm">'+c.date+'</div></div>'+
+            '<span class="pill '+contentStagePill(c.stage)+'">'+c.stage+'</span></div>';
+        }).join('')+'</div></div>';
+    }).join('')+'</div>';
+    host.querySelectorAll('[data-cq-idx]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var c=CONTENT_QUEUE[+el.getAttribute('data-cq-idx')];
+        openPreview({n:c.client+' · '+c.title, previewType:'post', previewText:c.previewText});
+      });
+    });
+    document.getElementById('contentQueueCnt').textContent=CONTENT_QUEUE.length+'건';
   }
 
   function insightRowHTML(ins){
@@ -1017,13 +1107,17 @@
       var cards=p.cards.filter(function(c){return c.stage===i});
       return '<div class="kcol"><div class="kh">'+stage+'<span class="kn">'+cards.length+'</span></div>'+
         cards.map(function(c){
+          var idx=p.cards.indexOf(c);
           var cls=['kcard'];
           if(c.urgent) cls.push('urgent');
           if(c.finished) cls.push('finished');
           if(c.approve) cls.push('approve');
           var sub = c.finished? '완료' : (c.approve? (role==='ceo'?'확인 대기 · 액션 필요':'대표 확인 대기') : (c.urgent?'마감 임박':'진행중'));
-          var approveBtns = (c.approve && role==='ceo') ? '<div style="display:flex;gap:6px;margin-top:8px"><button class="btn sm ok" data-card-idx="'+p.cards.indexOf(c)+'">확인</button></div>' : '';
-          return '<div class="'+cls.join(' ')+'"><div class="kt">'+c.t+'</div><div class="kd">'+sub+'</div>'+approveBtns+'</div>';
+          var btns='';
+          if(c.approve && role==='ceo') btns+='<button class="btn sm ok" data-card-idx="'+idx+'">확인</button>';
+          if(!c.finished && c.stage<p.stages.length-1) btns+='<button class="btn sm ghost edit-only" data-adv-idx="'+idx+'">다음 단계로</button>';
+          var btnRow = btns ? '<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">'+btns+'</div>' : '';
+          return '<div class="'+cls.join(' ')+'"><div class="kt">'+c.t+'</div><div class="kd">'+sub+'</div>'+btnRow+'</div>';
         }).join('')+
         '</div>';
     }).join('')+'</div>';
@@ -1035,6 +1129,15 @@
         renderApprovals();
       });
     });
+    host.querySelectorAll('[data-adv-idx]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var c=p.cards[+btn.getAttribute('data-adv-idx')];
+        c.stage+=1;
+        if(c.stage===p.stages.length-1) c.finished=true;
+        renderProduction();
+      });
+    });
+    applyRoleGating();
   }
 
   function docRow(d, idx){
@@ -1060,6 +1163,16 @@
         '<div class="btnrow" style="margin-top:16px;margin-bottom:0"><button class="btn primary" id="previewOpenNew"><svg viewBox="0 0 24 24" class="ico"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>새 창에서 재생</button></div>';
     } else if(d.previewType==='post'){
       body='<div class="postpreview"><div class="pp-head"><svg viewBox="0 0 24 24" class="ico" style="width:15px;height:15px"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21.5 7v10l-6-3.5"/></svg>'+d.n+'</div><div class="pp-body">'+d.previewText+'</div></div>';
+    } else if(d.previewType==='doc'){
+      var isTax=d.type==='tax';
+      body='<div class="metarows">'+
+        '<div class="brow"><span class="bk">고객사</span><span class="bv"><b>'+d.proj+'</b></span></div>'+
+        '<div class="brow"><span class="bk">종류</span><span class="bv">'+(isTax?'세금계산서':'견적서')+'</span></div>'+
+        '<div class="brow"><span class="bk">'+(isTax?'발행일':'작성일')+'</span><span class="bv">'+d.date+'</span></div>'+
+        '<div class="brow"><span class="bk">작성자</span><span class="bv">'+d.who+'</span></div></div>'+
+        '<div class="plain" style="margin-top:14px"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>'+
+        (isTax ? '팝빌로 발행된 전자세금계산서입니다. 국세청 신고 문서라 발행 후에는 수정할 수 없고, 정정 발급만 가능합니다.' : '이 견적서는 언제든 다시 열어 항목을 수정할 수 있습니다(발행 후에도 불변 문서 아님).')+
+        '</span></div>';
     } else return;
     document.getElementById('previewBody').innerHTML=body;
     document.getElementById('previewModal').classList.add('show'); scrim.classList.add('show');
@@ -1110,13 +1223,16 @@
     var quotes=[], taxes=[];
     PROJECTS.forEach(function(p){
       p.docs.forEach(function(d){
-        var row=docRow(Object.assign({},d,{n:p.name+' · '+d.n}));
-        if(d.type==='quote') quotes.push(row);
-        if(d.type==='tax') taxes.push(row);
+        var item=Object.assign({},d,{n:p.name+' · '+d.n, proj:p.name, previewType:'doc'});
+        if(d.type==='quote') quotes.push(item);
+        if(d.type==='tax') taxes.push(item);
       });
     });
-    document.getElementById('quoteList').innerHTML = quotes.join('') || '<div class="empty">아직 작성된 견적서가 없습니다.</div>';
-    document.getElementById('taxList').innerHTML = taxes.join('') || '<div class="empty">아직 발행된 세금계산서가 없습니다.</div>';
+    var quoteHost=document.getElementById('quoteList'), taxHost=document.getElementById('taxList');
+    quoteHost.innerHTML = quotes.length ? quotes.map(function(d,i){return docRow(d,i);}).join('') : '<div class="empty">아직 작성된 견적서가 없습니다.</div>';
+    taxHost.innerHTML = taxes.length ? taxes.map(function(d,i){return docRow(d,i);}).join('') : '<div class="empty">아직 발행된 세금계산서가 없습니다.</div>';
+    quoteHost.querySelectorAll('[data-preview-idx]').forEach(function(el){ el.addEventListener('click',function(){ openPreview(quotes[+el.getAttribute('data-preview-idx')]); }); });
+    taxHost.querySelectorAll('[data-preview-idx]').forEach(function(el){ el.addEventListener('click',function(){ openPreview(taxes[+el.getAttribute('data-preview-idx')]); }); });
     document.getElementById('quoteCnt').textContent = quotes.length+'건';
     document.getElementById('taxCnt').textContent = taxes.length+'건';
   }
@@ -1132,11 +1248,11 @@
     PROJECTS.forEach(function(p){
       if(p.type==='sns'){
         p.snsItems.filter(function(i){return i.approve}).forEach(function(i){
-          items.push({proj:p.name,title:i.title+' · 발행 확인',sub:p.name+' · SNS 운영 · '+i.date, tone:p.tone, initial:p.initial, ref:i});
+          items.push({proj:p.name,title:i.title+' · 발행 확인',sub:'SNS 운영 · '+i.date, tone:p.tone, initial:p.initial, ref:i});
         });
       } else if(p.cards){
         p.cards.filter(function(c){return c.approve}).forEach(function(c){
-          items.push({proj:p.name,title:c.t+' · 대표 확인 요청',sub:p.name+' · '+p.category, tone:p.tone, initial:p.initial, ref:c});
+          items.push({proj:p.name,title:c.t+' · 대표 확인 요청',sub:p.category, tone:p.tone, initial:p.initial, ref:c});
         });
       }
     });
@@ -1147,13 +1263,23 @@
       '<svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>대표님 화면입니다. 아래 항목을 보셨으면 <b>확인</b>만 눌러주시면 됩니다.</span>' :
       '<svg viewBox="0 0 24 24"><path d="M12 15a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M6 10V7a6 6 0 0 1 12 0v3"/><rect x="5" y="10" width="14" height="10" rx="2"/></svg><span>이보석님 화면에서는 확인 대기 현황만 조회됩니다. 실제 확인은 대표님 화면에서 이뤄집니다.</span>';
     var host=document.getElementById('apprList');
-    host.innerHTML = items.length ? items.map(function(it,i){
-      var actions = role==='ceo' ?
-        '<div class="aactions"><button class="btn ok" data-idx="'+i+'">확인</button></div>' :
-        '<span class="rolelock"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>대표 확인 대기중</span>';
-      return '<div class="apprrow"><div class="aic"><svg viewBox="0 0 24 24" class="ico"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>'+
-        '<div class="ainfo"><div class="at">'+it.title+'</div><div class="as">'+it.sub+'</div></div>'+actions+'</div>';
-    }).join('') : '<div class="empty">지금은 확인 대기 항목이 없습니다.</div>';
+    var clients=[];
+    items.forEach(function(it){ if(clients.indexOf(it.proj)===-1) clients.push(it.proj); });
+    host.innerHTML = items.length ? '<div class="docgroups">'+clients.map(function(clientName){
+      var group=items.filter(function(it){return it.proj===clientName;});
+      var tv=toneVars(group[0].tone);
+      return '<div class="docgroup"><div class="docgroup-head">'+
+        '<span class="dgav" style="background:'+tv.bg+';color:'+tv.c+'">'+group[0].initial+'</span>'+
+        '<span class="dgname">'+clientName+'</span><span class="dgcnt">'+group.length+'건</span></div>'+
+        '<div class="apprlist">'+group.map(function(it){
+          var idx=items.indexOf(it);
+          var actions = role==='ceo' ?
+            '<div class="aactions"><button class="btn ok" data-idx="'+idx+'">확인</button></div>' :
+            '<span class="rolelock"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>대표 확인 대기중</span>';
+          return '<div class="apprrow"><div class="aic"><svg viewBox="0 0 24 24" class="ico"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>'+
+            '<div class="ainfo"><div class="at">'+it.title+'</div><div class="as">'+it.sub+'</div></div>'+actions+'</div>';
+        }).join('')+'</div></div>';
+    }).join('')+'</div>' : '<div class="empty">지금은 확인 대기 항목이 없습니다.</div>';
     host.querySelectorAll('[data-idx]').forEach(function(btn){
       btn.addEventListener('click',function(){ markChecked(items[+btn.getAttribute('data-idx')].ref); });
     });
@@ -1173,14 +1299,14 @@
     document.querySelectorAll('.edit-only').forEach(function(el){ el.style.display = role==='ceo' ? 'none' : ''; });
   }
 
-  var DRILLDOWNS=['project','adreport'];
+  var DRILLDOWNS=['project','adreport','leaddetail'];
   var backTarget={name:'dashboard', title:'대시보드'};
 
   function goScreen(name,title,crumb){
     document.querySelectorAll('.screen').forEach(function(s){ s.classList.toggle('show', s.getAttribute('data-screen')===name); });
     document.getElementById('screenTitle').textContent=title;
     document.getElementById('backBtn').hidden = DRILLDOWNS.indexOf(name)===-1;
-    var highlightAs = name==='project' ? 'projects' : (name==='adreport' ? 'ads' : name);
+    var highlightAs = name==='project' ? 'projects' : (name==='adreport' ? 'ads' : (name==='leaddetail' ? 'crm' : name));
     document.querySelectorAll('.navitem').forEach(function(n){ n.classList.toggle('active', n.getAttribute('data-nav')===highlightAs); });
     document.querySelectorAll('.bnitem').forEach(function(n){ n.classList.toggle('active', n.getAttribute('data-nav')===highlightAs); });
     if(name==='crm') renderCRM();
