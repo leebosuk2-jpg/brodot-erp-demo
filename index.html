@@ -193,6 +193,20 @@
   .docrow .dn{font-size:13.5px;font-weight:700}
   .docrow .dm{font-size:11px;color:var(--ink-faint);font-family:var(--font-mono);margin-top:2px}
   .docrow .dtag{font-size:11px;color:var(--ink-dim);border:1px solid var(--line);padding:3px 8px;border-radius:100px;flex:none}
+  .docrow.previewable{cursor:pointer}
+  .docrow.previewable:hover{border-color:var(--line-strong);background:var(--surface-2)}
+  .docrow .dplay{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;flex:none;background:var(--signal-soft);color:var(--signal)}
+  .docrow .dplay svg{width:16px;height:16px}
+
+  .vidph{aspect-ratio:16/9;border-radius:var(--r-sm);background:linear-gradient(135deg,var(--surface-3),var(--surface-2));
+    border:1px solid var(--line);display:grid;place-items:center;gap:10px;color:var(--ink-faint)}
+  .vidph .vp-play{width:52px;height:52px;border-radius:50%;background:var(--signal-soft);color:var(--signal);display:grid;place-items:center}
+  .vidph .vp-play svg{width:22px;height:22px}
+  .vidph .vp-cap{font-size:12px;font-family:var(--font-mono)}
+
+  .postpreview{border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface-2);padding:16px}
+  .postpreview .pp-head{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:700;color:var(--ink-dim);margin-bottom:10px}
+  .postpreview .pp-body{font-size:13.5px;line-height:1.65;white-space:pre-wrap}
 
   .btn{border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);font-size:12.5px;font-weight:700;
     padding:9px 15px;border-radius:var(--r-xs);display:inline-flex;align-items:center;gap:7px;transition:.15s}
@@ -556,11 +570,11 @@
       <!-- ================= BILLING ================= -->
       <section class="screen" data-screen="billing">
         <div class="btnrow">
-          <button class="btn primary" id="openQuoteBtn">
+          <button class="btn primary edit-only" id="openQuoteBtn">
             <svg viewBox="0 0 24 24" class="ico"><path d="M12 5v14M5 12h14"/></svg>
             새 견적서 작성
           </button>
-          <button class="btn" id="openTaxBtn">
+          <button class="btn edit-only" id="openTaxBtn">
             <svg viewBox="0 0 24 24" class="ico"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/></svg>
             세금계산서 발행
           </button>
@@ -605,21 +619,11 @@
   <div class="drawer-body">
     <div class="kkbubble">
       <div class="kkh"><svg viewBox="0 0 24 24" style="width:13px;height:13px" fill="currentColor"><path d="M12 2C6.5 2 2 5.5 2 10c0 2.9 2 5.5 5 7l-1 3.5 3.8-2c.7.1 1.4.2 2.2.2 5.5 0 10-3.6 10-8S17.5 2 12 2Z"/></svg>알림톡 · 대표님</div>
-      <div class="kkb">[브로닷ERP] <b>G사</b> 랜딩페이지 최종 시안이 <b>고객사 컨펌 대기</b> 중입니다. 확인 부탁드립니다.</div>
-      <div class="kkt">오늘 09:14</div>
-    </div>
-    <div class="kkbubble">
-      <div class="kkh"><svg viewBox="0 0 24 24" style="width:13px;height:13px" fill="currentColor"><path d="M12 2C6.5 2 2 5.5 2 10c0 2.9 2 5.5 5 7l-1 3.5 3.8-2c.7.1 1.4.2 2.2.2 5.5 0 10-3.6 10-8S17.5 2 12 2Z"/></svg>알림톡 · 대표님</div>
-      <div class="kkb">[브로닷ERP] <b>B사</b> 7/15 발행 예정 콘텐츠 확인이 필요합니다.</div>
-      <div class="kkt">오늘 08:40</div>
-    </div>
-    <div class="kkbubble">
-      <div class="kkh"><svg viewBox="0 0 24 24" style="width:13px;height:13px" fill="currentColor"><path d="M12 2C6.5 2 2 5.5 2 10c0 2.9 2 5.5 5 7l-1 3.5 3.8-2c.7.1 1.4.2 2.2.2 5.5 0 10-3.6 10-8S17.5 2 12 2Z"/></svg>알림톡 · 이보석님</div>
-      <div class="kkb"><b>S사</b> 계약 갱신 마감이 <b>D-2</b> 남았습니다.</div>
-      <div class="kkt">어제 18:02</div>
+      <div class="kkb">[브로닷ERP] 오늘의 요약입니다.<br>· 마감임박(D-3 이내) <b>2건</b><br>· 확인 대기 <b>2건</b><br>· 이번달 발행완료 <b>7건</b><br><br>확인함에서 바로 보실 수 있습니다.</div>
+      <div class="kkt">오늘 09:00</div>
     </div>
     <div class="plain" style="border-left-color:var(--good)"><svg viewBox="0 0 24 24" style="color:var(--good)"><path d="M20 6 9 17l-5-5"/></svg>
-      <span>확인·마감 알림은 시스템을 열지 않아도 카카오톡으로 먼저 도착합니다. (팝빌·알림톡 API 연동 예정)</span></div>
+      <span>매일 아침 09:00에 이 요약 1건만 카카오톡으로 도착합니다(건별 알림 아님). 시스템을 열지 않아도 오늘 뭘 봐야 하는지 알 수 있습니다. (팝빌·알림톡 API 연동 예정)</span></div>
   </div>
 </div>
 
@@ -683,6 +687,15 @@
   </div>
 </div>
 
+<!-- content preview modal -->
+<div class="modal" id="previewModal">
+  <div class="modal-card">
+    <div class="modal-head"><h3 id="previewTitle">미리보기</h3>
+      <button class="modal-close" data-close-modal><svg viewBox="0 0 24 24" class="ico"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-body" id="previewBody"></div>
+  </div>
+</div>
+
 <script>
 (function(){
   var root=document.documentElement;
@@ -730,7 +743,7 @@
         {n:'견적서_2026-06.pdf', type:'quote', date:'2026-06-02', who:'이보석'},
         {n:'미팅록_0620.pdf', type:'meeting', date:'2026-06-20', who:'대표'},
         {n:'인보이스_07월.pdf', type:'invoice', date:'2026-07-01', who:'이보석'},
-        {n:'릴스13_최종납품.mp4', type:'deliverable', date:'2026-07-08', who:'이보석'}
+        {n:'릴스13_최종납품.mp4', type:'deliverable', date:'2026-07-08', who:'이보석', previewType:'video'}
       ]
     },
     {
@@ -763,7 +776,9 @@
       docs:[
         {n:'계약서_2026.pdf', type:'contract', date:'2026-02-01', who:'대표'},
         {n:'견적서_2026-02.pdf', type:'quote', date:'2026-02-01', who:'이보석'},
-        {n:'세금계산서_07월.pdf', type:'tax', date:'2026-07-02', who:'이보석'}
+        {n:'세금계산서_07월.pdf', type:'tax', date:'2026-07-02', who:'이보석'},
+        {n:'카드뉴스_여름철물류안내', type:'deliverable', date:'2026-07-10', who:'이보석', previewType:'post',
+          previewText:'[로지로이] 여름철 폭염 속 안전한 물류 이동 안내 🚚\n\n오늘같이 무더운 날, 저희 로지로이는 신선식품 배송 차량에 대해 특별 온도관리를 진행하고 있습니다.\n\n✔ 냉장/냉동 이중 시스템 상시 점검\n✔ 배송기사 폭염 안전수칙 준수\n✔ 실시간 온도 모니터링\n\n고객님의 소중한 물품, 로지로이가 끝까지 책임지겠습니다.'}
       ]
     },
     {
@@ -963,35 +978,61 @@
     });
   }
 
-  function docRow(d){
+  function docRow(d, idx, projLabel){
     var tone=ICON_TONE[d.type]; var tv=toneVars(tone);
-    return '<div class="docrow"><div class="dic" style="background:'+tv.bg+';color:'+tv.c+'">'+ICONS[d.type]+'</div>'+
-      '<div class="dinfo"><div class="dn">'+d.n+'</div><div class="dm">'+d.date+' · 업로드 '+d.who+'</div></div>'+
+    var cls = d.previewType ? 'docrow previewable' : 'docrow';
+    var idxAttr = (d.previewType && idx!=null) ? ' data-preview-idx="'+idx+'"' : '';
+    var icon = d.previewType ?
+      '<div class="dplay"><svg viewBox="0 0 24 24" class="ico"><path d="M8 5v14l11-7Z"/></svg></div>' :
+      '<div class="dic" style="background:'+tv.bg+';color:'+tv.c+'">'+ICONS[d.type]+'</div>';
+    var meta = (projLabel? projLabel+' · ' : '')+d.date+' · 업로드 '+d.who;
+    return '<div class="'+cls+'"'+idxAttr+'>'+icon+
+      '<div class="dinfo"><div class="dn">'+d.n+'</div><div class="dm">'+meta+'</div></div>'+
       '<span class="dtag">'+d.who+'</span></div>';
+  }
+
+  function openPreview(d){
+    if(!d.previewType) return;
+    document.getElementById('previewTitle').textContent=d.n;
+    var body;
+    if(d.previewType==='video'){
+      body='<div class="vidph"><div class="vp-play"><svg viewBox="0 0 24 24" class="ico" style="stroke:none;fill:currentColor"><path d="M8 5v14l11-7Z"/></svg></div><div class="vp-cap">'+d.n+'</div></div>'+
+        '<div class="plain" style="margin-top:14px"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>자동화 파이프라인이 산출물을 업로드하면 콜백으로 ERP에 연결되어, 실연동 후에는 이 자리에서 바로 재생됩니다.</span></div>'+
+        '<div class="btnrow" style="margin-top:16px;margin-bottom:0"><button class="btn primary" id="previewOpenNew"><svg viewBox="0 0 24 24" class="ico"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>새 창에서 재생</button></div>';
+    } else if(d.previewType==='post'){
+      body='<div class="postpreview"><div class="pp-head"><svg viewBox="0 0 24 24" class="ico" style="width:15px;height:15px"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21.5 7v10l-6-3.5"/></svg>'+d.n+'</div><div class="pp-body">'+d.previewText+'</div></div>';
+    } else return;
+    document.getElementById('previewBody').innerHTML=body;
+    document.getElementById('previewModal').classList.add('show'); scrim.classList.add('show');
+    var openBtn=document.getElementById('previewOpenNew');
+    if(openBtn) openBtn.addEventListener('click',function(){ alert('실제 연동 후에는 여기서 새 창으로 원본 영상 링크가 열립니다.'); });
   }
 
   function renderProjectDocs(){
     var host=document.getElementById('tabDocs');
     var p=currentProject;
     host.innerHTML='<div class="btnrow">'+
-      '<button class="btn primary" data-doc-upload><svg viewBox="0 0 24 24" class="ico"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>문서 업로드</button>'+
-      '<button class="btn" data-open-quote><svg viewBox="0 0 24 24" class="ico"><path d="M12 5v14M5 12h14"/></svg>견적서 작성</button>'+
-      '<button class="btn" data-open-tax><svg viewBox="0 0 24 24" class="ico"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/></svg>세금계산서 발행</button>'+
-      '</div><div class="doclist">'+p.docs.map(docRow).join('')+'</div>';
+      '<button class="btn primary edit-only" data-doc-upload><svg viewBox="0 0 24 24" class="ico"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>문서 업로드</button>'+
+      '<button class="btn edit-only" data-open-quote><svg viewBox="0 0 24 24" class="ico"><path d="M12 5v14M5 12h14"/></svg>견적서 작성</button>'+
+      '<button class="btn edit-only" data-open-tax><svg viewBox="0 0 24 24" class="ico"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/></svg>세금계산서 발행</button>'+
+      '</div><div class="doclist">'+p.docs.map(function(d,i){return docRow(d,i);}).join('')+'</div>';
     host.querySelector('[data-open-quote]').addEventListener('click',openQuoteModal);
     host.querySelector('[data-open-tax]').addEventListener('click',openTaxModal);
     host.querySelector('[data-doc-upload]').addEventListener('click',function(){alert('목업 화면입니다. 실제 업로드는 다음 개발 단계에서 연결됩니다.');});
+    host.querySelectorAll('[data-preview-idx]').forEach(function(el){
+      el.addEventListener('click',function(){ openPreview(p.docs[+el.getAttribute('data-preview-idx')]); });
+    });
+    applyRoleGating();
   }
 
   function renderAllDocs(){
     var all=[];
     PROJECTS.forEach(function(p){ p.docs.forEach(function(d){ all.push(Object.assign({},d,{proj:p.name})); }); });
-    document.getElementById('allDocs').innerHTML=all.map(function(d){
-      var tone=ICON_TONE[d.type]; var tv=toneVars(tone);
-      return '<div class="docrow"><div class="dic" style="background:'+tv.bg+';color:'+tv.c+'">'+ICONS[d.type]+'</div>'+
-        '<div class="dinfo"><div class="dn">'+d.n+'</div><div class="dm">'+d.proj+' · '+d.date+' · 업로드 '+d.who+'</div></div>'+
-        '<span class="dtag">'+d.who+'</span></div>';
-    }).join('');
+    var host=document.getElementById('allDocs');
+    host.innerHTML=all.map(function(d,i){return docRow(d,i,d.proj);}).join('');
+    host.querySelectorAll('[data-preview-idx]').forEach(function(el){
+      el.addEventListener('click',function(){ openPreview(all[+el.getAttribute('data-preview-idx')]); });
+    });
     var head=document.querySelector('[data-screen="documents"] h2');
     if(head) head.innerHTML='전체 문서 <span style="color:var(--ink-faint);font-weight:400;font-size:13px">('+all.length+')</span>';
   }
@@ -1059,6 +1100,10 @@
     t.addEventListener('click',function(){ setTab(t.getAttribute('data-tab')); });
   });
 
+  function applyRoleGating(){
+    document.querySelectorAll('.edit-only').forEach(function(el){ el.style.display = role==='ceo' ? 'none' : ''; });
+  }
+
   function goScreen(name,title,crumb){
     document.querySelectorAll('.screen').forEach(function(s){ s.classList.toggle('show', s.getAttribute('data-screen')===name); });
     document.getElementById('screenTitle').textContent=title;
@@ -1072,6 +1117,7 @@
     if(name==='content') renderContentQueue();
     if(name==='billing') renderBilling();
     if(name==='approvals') renderApprovals();
+    applyRoleGating();
     window.scrollTo({top:0,behavior:'auto'});
   }
 
@@ -1090,8 +1136,9 @@
       role=btn.getAttribute('data-role');
       document.querySelectorAll('.roletoggle button').forEach(function(b){ b.classList.toggle('on', b===btn); });
       document.getElementById('roleDesc').textContent = role==='ceo' ? '대표 · 영업총괄 — 조회 + 확인 권한' : '운영총괄 — 전체 편집 권한';
-      if(currentProject) renderProduction();
+      if(currentProject){ renderProduction(); renderProjectDocs(); }
       if(document.querySelector('[data-screen="approvals"]').classList.contains('show')) renderApprovals();
+      applyRoleGating();
     });
   });
 
