@@ -253,6 +253,9 @@
   .perftable td:first-child{font-weight:700;font-variant-numeric:normal}
   .perftable .roas-good{color:var(--good);font-weight:700}
   .perftable .roas-warn{color:var(--amber);font-weight:700}
+  .perftable tr.adrow{cursor:pointer}
+  .perftable tr.adrow:hover td{background:var(--surface-2)}
+  .perftable tr.adrow td:first-child{color:var(--signal)}
   .chtag{font-family:var(--font-mono);font-size:10px;color:var(--ink-dim);border:1px solid var(--line);padding:2.5px 7px;border-radius:100px}
 
   .insightlist{display:flex;flex-direction:column;gap:10px}
@@ -546,30 +549,27 @@
           <div class="sumcard warn"><div class="sv">41<span class="u">%</span></div><div class="sl">평균 이탈률</div></div>
         </div>
 
-        <div class="sechead"><h2>고객사별 채널 성과</h2><span class="cnt">이번달</span></div>
+        <div class="sechead"><h2>고객사별 채널 성과</h2><span class="cnt">이번달 · 고객사 클릭 시 상세 리포트</span></div>
         <div style="overflow-x:auto"><table class="perftable">
           <thead><tr><th>고객사</th><th>채널</th><th>지출</th><th>전환</th><th>ROAS</th><th>출처</th></tr></thead>
-          <tbody>
-            <tr><td>한화리조트</td><td>메타 광고</td><td>₩ 3.2M</td><td>128</td><td class="roas-good">5.1배</td><td><span class="chtag">광고로그</span></td></tr>
-            <tr><td>성원시스템</td><td>구글 검색광고</td><td>₩ 1.8M</td><td>41</td><td class="roas-warn">2.4배</td><td><span class="chtag">광고로그</span></td></tr>
-            <tr><td>로지로이</td><td>카카오 · 알림톡</td><td>₩ 0.6M</td><td>63</td><td class="roas-good">6.0배</td><td><span class="chtag">광고로그</span></td></tr>
-            <tr><td>한화리조트</td><td>인스타그램</td><td>-</td><td>도달 41만</td><td>-</td><td><span class="chtag">SNS 인사이트</span></td></tr>
-            <tr><td>성원시스템</td><td>랜딩페이지</td><td>-</td><td>이탈률 42%</td><td>-</td><td><span class="chtag">GA4</span></td></tr>
-          </tbody>
+          <tbody id="adTableBody"></tbody>
         </table></div>
 
         <div class="sechead"><h2>AI 로그분석 인사이트</h2></div>
-        <div class="insightlist">
-          <div class="insight"><div class="iic2"><svg viewBox="0 0 24 24" class="ico"><path d="M4 20V4M4 20h16M8 16v-4M12 16V9M16 16v-6"/></svg></div>
-            <div class="ibody"><div class="itxt"><b>한화리조트 메타 광고 ROAS 5.1배(▲0.6)</b> — 릴스 소재를 사용한 캠페인의 CTR이 이전 대비 18%p 높음. 동일 포맷으로 후속 소재 추가 제작 추천.</div>
-            <div class="isrc">근거: 메타 광고 로그 · 최근 14일</div></div></div>
-          <div class="insight"><div class="iic2"><svg viewBox="0 0 24 24" class="ico"><path d="M3 3v18h18M8 14l3-4 3 3 4-6"/></svg></div>
-            <div class="ibody"><div class="itxt"><b>성원시스템 랜딩페이지 이탈률 42%</b> — '요금 안내' 섹션 진입 직후 이탈이 집중됨. 해당 구간 로딩 지연(평균 2.8초) 확인 필요.</div>
-            <div class="isrc">근거: GA4 방문자 로그 · 이벤트 흐름 분석</div></div></div>
-          <div class="insight"><div class="iic2"><svg viewBox="0 0 24 24" class="ico"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
-            <div class="ibody"><div class="itxt"><b>로지로이 카카오 알림톡 신규유입 32%↑</b> — 이벤트 알림톡 발송 직후 3시간 내 예약 문의가 집중. 발송 요일·시간대를 화·목 오전으로 고정 시 효과 유지 전망.</div>
-            <div class="isrc">근거: 카카오 알림톡 로그 + GA4 유입경로</div></div></div>
-        </div>
+        <div class="insightlist" id="adInsights"></div>
+      </section>
+
+      <!-- ================= AD REPORT (고객사별 상세) ================= -->
+      <section class="screen" data-screen="adreport">
+        <div class="pdhead" id="adrHead"></div>
+        <div class="sumstrip" id="adrSum" style="margin-top:20px"></div>
+        <div class="sechead" style="margin-top:24px"><h2>채널별 성과</h2></div>
+        <div style="overflow-x:auto"><table class="perftable">
+          <thead><tr><th>채널</th><th>지출</th><th>전환</th><th>ROAS</th><th>출처</th></tr></thead>
+          <tbody id="adrTableBody"></tbody>
+        </table></div>
+        <div class="sechead" style="margin-top:24px"><h2>AI 로그분석 인사이트</h2></div>
+        <div class="insightlist" id="adrInsights"></div>
       </section>
 
       <!-- ================= BILLING ================= -->
@@ -850,6 +850,18 @@
     {n:'B사 · 7/15 릴스 발행', type:'deliverable', date:'감수완료 · 07-10', who:'대표확인대기'},
     {n:'S사 · 7월 바이럴 대본안', type:'deliverable', date:'AI 생성 · 07-09', who:'감수대기'}
   ];
+  var AD_ROWS=[
+    {client:'한화리조트', channel:'메타 광고', spend:'₩ 3.2M', conv:'128', roas:'5.1배', roasClass:'roas-good', source:'광고로그'},
+    {client:'성원시스템', channel:'구글 검색광고', spend:'₩ 1.8M', conv:'41', roas:'2.4배', roasClass:'roas-warn', source:'광고로그'},
+    {client:'로지로이', channel:'카카오 · 알림톡', spend:'₩ 0.6M', conv:'63', roas:'6.0배', roasClass:'roas-good', source:'광고로그'},
+    {client:'한화리조트', channel:'인스타그램', spend:'-', conv:'도달 41만', roas:'-', roasClass:'', source:'SNS 인사이트'},
+    {client:'성원시스템', channel:'랜딩페이지', spend:'-', conv:'이탈률 42%', roas:'-', roasClass:'', source:'GA4'}
+  ];
+  var AD_INSIGHTS=[
+    {client:'한화리조트', iconPath:'M4 20V4M4 20h16M8 16v-4M12 16V9M16 16v-6', title:'한화리조트 메타 광고 ROAS 5.1배(▲0.6)', body:'릴스 소재를 사용한 캠페인의 CTR이 이전 대비 18%p 높음. 동일 포맷으로 후속 소재 추가 제작 추천.', src:'근거: 메타 광고 로그 · 최근 14일'},
+    {client:'성원시스템', iconPath:'M3 3v18h18M8 14l3-4 3 3 4-6', title:'성원시스템 랜딩페이지 이탈률 42%', body:"'요금 안내' 섹션 진입 직후 이탈이 집중됨. 해당 구간 로딩 지연(평균 2.8초) 확인 필요.", src:'근거: GA4 방문자 로그 · 이벤트 흐름 분석'},
+    {client:'로지로이', iconPath:'M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0', title:'로지로이 카카오 알림톡 신규유입 32%↑', body:'이벤트 알림톡 발송 직후 3시간 내 예약 문의가 집중. 발송 요일·시간대를 화·목 오전으로 고정 시 효과 유지 전망.', src:'근거: 카카오 알림톡 로그 + GA4 유입경로'}
+  ];
 
   var role='operator';
   var currentProject=null;
@@ -911,8 +923,50 @@
     }).join('');
   }
 
+  function insightRowHTML(ins){
+    return '<div class="insight"><div class="iic2"><svg viewBox="0 0 24 24" class="ico"><path d="'+ins.iconPath+'"/></svg></div>'+
+      '<div class="ibody"><div class="itxt"><b>'+ins.title+'</b> — '+ins.body+'</div>'+
+      '<div class="isrc">'+ins.src+'</div></div></div>';
+  }
+
+  function adRowHTML(r, withClient){
+    var cls = withClient ? ' class="adrow" data-ad-client="'+r.client+'"' : '';
+    var clientCell = withClient ? '<td>'+r.client+'</td>' : '';
+    return '<tr'+cls+'>'+clientCell+'<td>'+r.channel+'</td><td>'+r.spend+'</td><td>'+r.conv+'</td>'+
+      '<td class="'+r.roasClass+'">'+r.roas+'</td><td><span class="chtag">'+r.source+'</span></td></tr>';
+  }
+
+  function renderAds(){
+    document.getElementById('adTableBody').innerHTML = AD_ROWS.map(function(r){ return adRowHTML(r, true); }).join('');
+    document.getElementById('adInsights').innerHTML = AD_INSIGHTS.map(insightRowHTML).join('');
+    document.querySelectorAll('#adTableBody [data-ad-client]').forEach(function(tr){
+      tr.addEventListener('click',function(){ openAdReport(tr.getAttribute('data-ad-client')); });
+    });
+  }
+
+  function openAdReport(clientName){
+    var proj = PROJECTS.filter(function(p){return p.name===clientName;})[0];
+    var rows = AD_ROWS.filter(function(r){return r.client===clientName;});
+    var insights = AD_INSIGHTS.filter(function(r){return r.client===clientName;});
+    backTarget={name:'ads', title:'광고성과'};
+    goScreen('adreport', clientName+' 광고 리포트');
+    var tv = proj ? toneVars(proj.tone) : toneVars('signal');
+    document.getElementById('adrHead').innerHTML =
+      '<div class="pav" style="background:'+tv.bg+';color:'+tv.c+'">'+(proj?proj.initial:clientName.charAt(0))+'</div>'+
+      '<div><h2>'+clientName+'</h2><div class="pdmeta">'+(proj?proj.category:'광고성과 상세')+'</div></div>';
+    var roasVals = rows.map(function(r){return parseFloat(r.roas);}).filter(function(n){return !isNaN(n);});
+    var avgRoas = roasVals.length ? (roasVals.reduce(function(a,b){return a+b;},0)/roasVals.length).toFixed(1) : '-';
+    document.getElementById('adrSum').innerHTML =
+      '<div class="sumcard sig"><div class="sv">'+avgRoas+(avgRoas!=='-'?'<span class="u">배</span>':'')+'</div><div class="sl">평균 ROAS</div></div>'+
+      '<div class="sumcard"><div class="sv">'+rows.length+'</div><div class="sl">추적 채널 수</div></div>'+
+      '<div class="sumcard"><div class="sv">'+insights.length+'</div><div class="sl">AI 인사이트</div></div>';
+    document.getElementById('adrTableBody').innerHTML = rows.map(function(r){ return adRowHTML(r, false); }).join('');
+    document.getElementById('adrInsights').innerHTML = insights.length ? insights.map(insightRowHTML).join('') : '<div class="empty">이 고객사에 대한 AI 인사이트가 아직 없습니다.</div>';
+  }
+
   function openProject(id){
     currentProject=PROJECTS.filter(function(p){return p.id===id})[0];
+    backTarget={name:'projects', title:'프로젝트'};
     goScreen('project', currentProject.name+' 프로젝트');
     var tv=toneVars(currentProject.tone);
     document.getElementById('pdHead').innerHTML=
@@ -1119,17 +1173,21 @@
     document.querySelectorAll('.edit-only').forEach(function(el){ el.style.display = role==='ceo' ? 'none' : ''; });
   }
 
+  var DRILLDOWNS=['project','adreport'];
+  var backTarget={name:'dashboard', title:'대시보드'};
+
   function goScreen(name,title,crumb){
     document.querySelectorAll('.screen').forEach(function(s){ s.classList.toggle('show', s.getAttribute('data-screen')===name); });
     document.getElementById('screenTitle').textContent=title;
-    document.getElementById('backBtn').hidden = name!=='project';
-    var highlightAs = name==='project' ? 'projects' : name;
+    document.getElementById('backBtn').hidden = DRILLDOWNS.indexOf(name)===-1;
+    var highlightAs = name==='project' ? 'projects' : (name==='adreport' ? 'ads' : name);
     document.querySelectorAll('.navitem').forEach(function(n){ n.classList.toggle('active', n.getAttribute('data-nav')===highlightAs); });
     document.querySelectorAll('.bnitem').forEach(function(n){ n.classList.toggle('active', n.getAttribute('data-nav')===highlightAs); });
     if(name==='crm') renderCRM();
     if(name==='projects') renderProjectsFull();
     if(name==='documents') renderAllDocs();
     if(name==='content') renderContentQueue();
+    if(name==='ads') renderAds();
     if(name==='billing') renderBilling();
     if(name==='approvals') renderApprovals();
     applyRoleGating();
@@ -1143,7 +1201,7 @@
       goScreen(target, titles[target]);
     });
   });
-  document.getElementById('backBtn').addEventListener('click',function(){ goScreen('dashboard','대시보드'); });
+  document.getElementById('backBtn').addEventListener('click',function(){ goScreen(backTarget.name, backTarget.title); });
 
   // role toggle
   document.querySelectorAll('.roletoggle button').forEach(function(btn){
