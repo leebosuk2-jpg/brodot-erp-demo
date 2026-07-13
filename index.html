@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>브로닷 ERP 목업</title>
 <style>
   :root{
     --ground:#0A0F1A;--surface:#121A28;--surface-2:#18212F;--surface-3:#1E2938;
@@ -14,19 +20,6 @@
     --font-sans:"Pretendard","Pretendard Variable",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Malgun Gothic",system-ui,sans-serif;
     --font-mono:ui-monospace,"Cascadia Code","SF Mono",Consolas,"D2Coding",monospace;
     --sidebar-w:238px;
-  }
-  @media (prefers-color-scheme: light){
-    :root{
-      --ground:#EEF3F9;--surface:#FFFFFF;--surface-2:#F3F7FC;--surface-3:#E9F0F8;
-      --line:rgba(30,58,95,.11);--line-strong:rgba(30,58,95,.2);
-      --ink:#0E1A2A;--ink-dim:#4C5E76;--ink-faint:#8194AB;
-      --brand:#2E6DA4;--brand-deep:#235A8A;--signal:#0E82B4;--signal-soft:rgba(14,130,180,.09);
-      --amber:#B27414;--amber-soft:rgba(178,116,20,.1);
-      --good:#1E9E6A;--good-soft:rgba(30,158,106,.1);
-      --red:#CB4B3E;--red-soft:rgba(203,75,62,.1);
-      --violet:#6E5BC7;--violet-soft:rgba(110,91,199,.1);
-      --shadow:0 30px 60px -35px rgba(30,58,95,.3);--shadow-sm:0 10px 26px -16px rgba(30,58,95,.28);
-    }
   }
   :root[data-theme="dark"]{
     --ground:#0A0F1A;--surface:#121A28;--surface-2:#18212F;--surface-3:#1E2938;
@@ -342,6 +335,8 @@
     .kanban{grid-template-columns:1fr}
   }
 </style>
+</head>
+<body>
 
 <div class="app">
   <aside class="sidebar">
@@ -1095,3 +1090,5 @@
   renderDashboard();
 })();
 </script>
+</body>
+</html>
