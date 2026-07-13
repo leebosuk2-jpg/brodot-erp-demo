@@ -376,7 +376,7 @@
         </button>
         <button class="navitem" data-nav="approvals">
           <svg viewBox="0 0 24 24" class="ico"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          <span class="navlabel">승인함</span>
+          <span class="navlabel">확인함</span>
           <span class="navbadge alert" id="apprBadgeNav">2</span>
         </button>
       </div>
@@ -436,7 +436,7 @@
         <div class="sumstrip">
           <div class="sumcard"><div class="sv" id="sumProjCnt">6</div><div class="sl">진행중 고객사 프로젝트</div></div>
           <div class="sumcard warn"><div class="sv">2</div><div class="sl">이번주 마감 임박</div></div>
-          <div class="sumcard sig"><div class="sv">2</div><div class="sl">승인 대기중</div></div>
+          <div class="sumcard sig"><div class="sv">2</div><div class="sl">확인 대기중</div></div>
           <div class="sumcard"><div class="sv">7<span class="u">건</span></div><div class="sl">이번달 발행 완료</div></div>
         </div>
 
@@ -491,11 +491,11 @@
       <!-- ================= CONTENT AUTOMATION ================= -->
       <section class="screen" data-screen="content">
         <div class="plain"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          <span>SNS·바이럴 콘텐츠는 AI가 기획·초안까지 생성하고, 사람은 감수·승인만 합니다. <b style="color:var(--signal)">파란색</b>은 AI, <b style="color:var(--amber)">노란색</b>은 사람이 하는 단계입니다.</span></div>
+          <span>SNS·바이럴 콘텐츠는 AI가 기획·초안까지 생성하고, 사람은 감수·확인만 합니다. <b style="color:var(--signal)">파란색</b>은 AI, <b style="color:var(--amber)">노란색</b>은 사람이 하는 단계입니다.</span></div>
         <div class="sumstrip" style="margin-top:20px">
           <div class="sumcard sig"><div class="sv">12<span class="u">건</span></div><div class="sl">이번달 AI 초안 생성</div></div>
           <div class="sumcard"><div class="sv">4<span class="u">건</span></div><div class="sl">감수 대기</div></div>
-          <div class="sumcard warn"><div class="sv">2<span class="u">건</span></div><div class="sl">발행 승인 대기</div></div>
+          <div class="sumcard warn"><div class="sv">2<span class="u">건</span></div><div class="sl">발행 확인 대기</div></div>
           <div class="sumcard"><div class="sv">96<span class="u">%</span></div><div class="sl">자동화 처리 비율</div></div>
         </div>
         <div class="sechead"><h2>자동화 흐름</h2></div>
@@ -506,7 +506,7 @@
           <div class="wfarrow"><svg viewBox="0 0 24 24" class="ico"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
           <div class="wfstep human">사람 · 감수</div>
           <div class="wfarrow"><svg viewBox="0 0 24 24" class="ico"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-          <div class="wfstep human">대표 · 발행승인</div>
+          <div class="wfstep human">대표 · 발행확인</div>
           <div class="wfarrow"><svg viewBox="0 0 24 24" class="ico"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
           <div class="wfstep ai">AI · 예약 발행</div>
         </div>
@@ -574,7 +574,7 @@
       <!-- ================= APPROVALS ================= -->
       <section class="screen" data-screen="approvals">
         <div class="plain" id="apprHint"></div>
-        <div class="sechead" style="margin-top:24px"><h2>승인 대기</h2><span class="cnt" id="apprCount"></span></div>
+        <div class="sechead" style="margin-top:24px"><h2>확인 대기</h2><span class="cnt" id="apprCount"></span></div>
         <div class="apprlist" id="apprList"></div>
       </section>
 
@@ -590,7 +590,7 @@
     <button class="bnitem" data-nav="ads"><svg viewBox="0 0 24 24" class="ico"><path d="M4 20V4M4 20h16M8 16v-4M12 16V9M16 16v-6"/></svg>광고성과</button>
     <button class="bnitem" data-nav="billing"><svg viewBox="0 0 24 24" class="ico"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/></svg>정산</button>
     <button class="bnitem" data-nav="approvals">
-      <svg viewBox="0 0 24 24" class="ico"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>승인함
+      <svg viewBox="0 0 24 24" class="ico"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>확인함
       <span class="navbadge alert" id="apprBadgeBn">2</span>
     </button>
   </nav>
@@ -605,12 +605,12 @@
   <div class="drawer-body">
     <div class="kkbubble">
       <div class="kkh"><svg viewBox="0 0 24 24" style="width:13px;height:13px" fill="currentColor"><path d="M12 2C6.5 2 2 5.5 2 10c0 2.9 2 5.5 5 7l-1 3.5 3.8-2c.7.1 1.4.2 2.2.2 5.5 0 10-3.6 10-8S17.5 2 12 2Z"/></svg>알림톡 · 대표님</div>
-      <div class="kkb">[브로닷ERP] <b>G사</b> 랜딩페이지 최종 시안이 <b>고객사 컨펌 대기</b> 중입니다. 확인 후 승인 부탁드립니다.</div>
+      <div class="kkb">[브로닷ERP] <b>G사</b> 랜딩페이지 최종 시안이 <b>고객사 컨펌 대기</b> 중입니다. 확인 부탁드립니다.</div>
       <div class="kkt">오늘 09:14</div>
     </div>
     <div class="kkbubble">
       <div class="kkh"><svg viewBox="0 0 24 24" style="width:13px;height:13px" fill="currentColor"><path d="M12 2C6.5 2 2 5.5 2 10c0 2.9 2 5.5 5 7l-1 3.5 3.8-2c.7.1 1.4.2 2.2.2 5.5 0 10-3.6 10-8S17.5 2 12 2Z"/></svg>알림톡 · 대표님</div>
-      <div class="kkb">[브로닷ERP] <b>B사</b> 7/15 발행 예정 콘텐츠 승인이 필요합니다.</div>
+      <div class="kkb">[브로닷ERP] <b>B사</b> 7/15 발행 예정 콘텐츠 확인이 필요합니다.</div>
       <div class="kkt">오늘 08:40</div>
     </div>
     <div class="kkbubble">
@@ -619,7 +619,7 @@
       <div class="kkt">어제 18:02</div>
     </div>
     <div class="plain" style="border-left-color:var(--good)"><svg viewBox="0 0 24 24" style="color:var(--good)"><path d="M20 6 9 17l-5-5"/></svg>
-      <span>승인·마감 알림은 시스템을 열지 않아도 카카오톡으로 먼저 도착합니다. (팝빌·알림톡 API 연동 예정)</span></div>
+      <span>확인·마감 알림은 시스템을 열지 않아도 카카오톡으로 먼저 도착합니다. (팝빌·알림톡 API 연동 예정)</span></div>
   </div>
 </div>
 
@@ -827,7 +827,7 @@
   var CONTENT_QUEUE=[
     {n:'S사 · 릴스 #15 초안', type:'deliverable', date:'AI 생성 · 07-12', who:'감수대기'},
     {n:'B사 · 카드뉴스 초안 2건', type:'deliverable', date:'AI 생성 · 07-11', who:'감수대기'},
-    {n:'B사 · 7/15 릴스 발행', type:'deliverable', date:'감수완료 · 07-10', who:'대표승인대기'},
+    {n:'B사 · 7/15 릴스 발행', type:'deliverable', date:'감수완료 · 07-10', who:'대표확인대기'},
     {n:'S사 · 7월 바이럴 대본안', type:'deliverable', date:'AI 생성 · 07-09', who:'감수대기'}
   ];
 
@@ -909,26 +909,34 @@
     if(status.indexOf('대기')>-1 || status.indexOf('임박')>-1) return 'wait';
     return 'run';
   }
-  function scheduleRowsHTML(items){
-    return '<div class="snslist">'+items.map(function(it){
+  function renderScheduleRows(host, items){
+    host.innerHTML = items && items.length ? '<div class="snslist">'+items.map(function(it,i){
       var pillClass=schedPillClass(it.status);
-      var appr = (it.approve && role==='ceo') ? '<div class="actions"><button class="btn sm ok">승인</button><button class="btn sm no">반려</button></div>' : (it.approve ? '<span class="rolelock"><svg viewBox="0 0 24 24"><path d="M12 15a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M6 10V7a6 6 0 0 1 12 0v3"/><rect x="5" y="10" width="14" height="10" rx="2"/></svg>대표 승인 대기</span>':'');
+      var appr = (it.approve && role==='ceo') ? '<div class="actions"><button class="btn sm ok" data-sched-idx="'+i+'">확인</button></div>' : (it.approve ? '<span class="rolelock"><svg viewBox="0 0 24 24"><path d="M12 15a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M6 10V7a6 6 0 0 1 12 0v3"/><rect x="5" y="10" width="14" height="10" rx="2"/></svg>대표 확인 대기</span>':'');
       return '<div class="snsrow"><span class="sd">'+it.date+'</span><span class="st2">'+it.title+'</span><span class="pill '+pillClass+'">'+it.status+'</span>'+appr+'</div>';
-    }).join('')+'</div>';
+    }).join('')+'</div>' : '<div class="empty">등록된 일정이 없습니다.</div>';
+    host.querySelectorAll('[data-sched-idx]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var it=items[+btn.getAttribute('data-sched-idx')];
+        it.approve=false; it.checked=true;
+        renderScheduleRows(host, items);
+        renderApprovals();
+      });
+    });
   }
 
   function renderProjectSchedule(){
     var host=document.getElementById('tabSchedule');
     var p=currentProject;
     var items = p.type==='sns' ? p.snsItems : p.schedule;
-    host.innerHTML = items && items.length ? scheduleRowsHTML(items) : '<div class="empty">등록된 일정이 없습니다.</div>';
+    renderScheduleRows(host, items || []);
   }
 
   function renderProduction(){
     var host=document.getElementById('tabProduction');
     var p=currentProject;
     if(p.type==='sns'){
-      host.innerHTML=scheduleRowsHTML(p.snsItems);
+      renderScheduleRows(host, p.snsItems);
       return;
     }
     host.innerHTML='<div class="kanban">'+p.stages.map(function(stage,i){
@@ -939,12 +947,20 @@
           if(c.urgent) cls.push('urgent');
           if(c.finished) cls.push('finished');
           if(c.approve) cls.push('approve');
-          var sub = c.finished? '완료' : (c.approve? (role==='ceo'?'승인 대기 · 액션 필요':'대표 승인 대기') : (c.urgent?'마감 임박':'진행중'));
-          var approveBtns = (c.approve && role==='ceo') ? '<div style="display:flex;gap:6px;margin-top:8px"><button class="btn sm ok">승인</button><button class="btn sm no">반려</button></div>' : '';
+          var sub = c.finished? '완료' : (c.approve? (role==='ceo'?'확인 대기 · 액션 필요':'대표 확인 대기') : (c.urgent?'마감 임박':'진행중'));
+          var approveBtns = (c.approve && role==='ceo') ? '<div style="display:flex;gap:6px;margin-top:8px"><button class="btn sm ok" data-card-idx="'+p.cards.indexOf(c)+'">확인</button></div>' : '';
           return '<div class="'+cls.join(' ')+'"><div class="kt">'+c.t+'</div><div class="kd">'+sub+'</div>'+approveBtns+'</div>';
         }).join('')+
         '</div>';
     }).join('')+'</div>';
+    host.querySelectorAll('[data-card-idx]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var c=p.cards[+btn.getAttribute('data-card-idx')];
+        c.approve=false; c.checked=true;
+        renderProduction();
+        renderApprovals();
+      });
+    });
   }
 
   function docRow(d){
@@ -995,16 +1011,22 @@
     document.getElementById('taxCnt').textContent = taxes.length+'건';
   }
 
+  function markChecked(ref){
+    ref.approve=false;
+    ref.checked=true;
+    renderApprovals();
+  }
+
   function renderApprovals(){
     var items=[];
     PROJECTS.forEach(function(p){
       if(p.type==='sns'){
         p.snsItems.filter(function(i){return i.approve}).forEach(function(i){
-          items.push({proj:p.name,title:i.title+' · 발행 승인',sub:p.name+' · SNS 운영 · '+i.date, tone:p.tone, initial:p.initial});
+          items.push({proj:p.name,title:i.title+' · 발행 확인',sub:p.name+' · SNS 운영 · '+i.date, tone:p.tone, initial:p.initial, ref:i});
         });
       } else if(p.cards){
         p.cards.filter(function(c){return c.approve}).forEach(function(c){
-          items.push({proj:p.name,title:c.t+' · 고객사컨펌 직전 확인',sub:p.name+' · '+p.category, tone:p.tone, initial:p.initial});
+          items.push({proj:p.name,title:c.t+' · 고객사컨펌 직전 확인',sub:p.name+' · '+p.category, tone:p.tone, initial:p.initial, ref:c});
         });
       }
     });
@@ -1012,15 +1034,19 @@
     ['apprBadgeNav','apprBadgeBn'].forEach(function(id){ var e=document.getElementById(id); if(e) e.textContent=badge; });
     document.getElementById('apprCount').textContent=badge+'건';
     document.getElementById('apprHint').innerHTML = role==='ceo' ?
-      '<svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>대표님 화면입니다. 아래 항목을 확인하고 <b>승인 또는 반려</b>만 누르시면 됩니다.</span>' :
-      '<svg viewBox="0 0 24 24"><path d="M12 15a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M6 10V7a6 6 0 0 1 12 0v3"/><rect x="5" y="10" width="14" height="10" rx="2"/></svg><span>이보석님 화면에서는 승인 요청 현황만 조회됩니다. 실제 승인은 대표님 화면에서 이뤄집니다.</span>';
-    document.getElementById('apprList').innerHTML = items.length ? items.map(function(it){
+      '<svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>대표님 화면입니다. 아래 항목을 보셨으면 <b>확인</b>만 눌러주시면 됩니다.</span>' :
+      '<svg viewBox="0 0 24 24"><path d="M12 15a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M6 10V7a6 6 0 0 1 12 0v3"/><rect x="5" y="10" width="14" height="10" rx="2"/></svg><span>이보석님 화면에서는 확인 대기 현황만 조회됩니다. 실제 확인은 대표님 화면에서 이뤄집니다.</span>';
+    var host=document.getElementById('apprList');
+    host.innerHTML = items.length ? items.map(function(it,i){
       var actions = role==='ceo' ?
-        '<div class="aactions"><button class="btn ok">승인</button><button class="btn no">반려</button></div>' :
-        '<span class="rolelock"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>대표 승인 대기중</span>';
+        '<div class="aactions"><button class="btn ok" data-idx="'+i+'">확인</button></div>' :
+        '<span class="rolelock"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>대표 확인 대기중</span>';
       return '<div class="apprrow"><div class="aic"><svg viewBox="0 0 24 24" class="ico"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>'+
         '<div class="ainfo"><div class="at">'+it.title+'</div><div class="as">'+it.sub+'</div></div>'+actions+'</div>';
-    }).join('') : '<div class="empty">지금은 승인 대기 항목이 없습니다.</div>';
+    }).join('') : '<div class="empty">지금은 확인 대기 항목이 없습니다.</div>';
+    host.querySelectorAll('[data-idx]').forEach(function(btn){
+      btn.addEventListener('click',function(){ markChecked(items[+btn.getAttribute('data-idx')].ref); });
+    });
   }
 
   function setTab(name){
@@ -1052,7 +1078,7 @@
   document.querySelectorAll('[data-nav]').forEach(function(btn){
     btn.addEventListener('click',function(){
       var target=btn.getAttribute('data-nav');
-      var titles={dashboard:'대시보드',crm:'고객사',projects:'프로젝트',documents:'문서함',content:'콘텐츠 자동화',ads:'광고성과',billing:'견적 · 세금계산서',approvals:'승인함'};
+      var titles={dashboard:'대시보드',crm:'고객사',projects:'프로젝트',documents:'문서함',content:'콘텐츠 자동화',ads:'광고성과',billing:'견적 · 세금계산서',approvals:'확인함'};
       goScreen(target, titles[target]);
     });
   });
@@ -1063,7 +1089,7 @@
     btn.addEventListener('click',function(){
       role=btn.getAttribute('data-role');
       document.querySelectorAll('.roletoggle button').forEach(function(b){ b.classList.toggle('on', b===btn); });
-      document.getElementById('roleDesc').textContent = role==='ceo' ? '대표 · 영업총괄 — 조회 + 승인 권한' : '운영총괄 — 전체 편집 권한';
+      document.getElementById('roleDesc').textContent = role==='ceo' ? '대표 · 영업총괄 — 조회 + 확인 권한' : '운영총괄 — 전체 편집 권한';
       if(currentProject) renderProduction();
       if(document.querySelector('[data-screen="approvals"]').classList.contains('show')) renderApprovals();
     });
