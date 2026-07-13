@@ -472,9 +472,11 @@
         <div class="pdhead" id="pdHead"></div>
         <div class="tabs">
           <button class="tab active" data-tab="production">제작현황</button>
+          <button class="tab" data-tab="schedule">일정</button>
           <button class="tab" data-tab="docs">문서함</button>
         </div>
         <div id="tabProduction"></div>
+        <div id="tabSchedule" style="display:none"></div>
         <div id="tabDocs" style="display:none"></div>
       </section>
 
@@ -717,6 +719,12 @@
         {t:'릴스 #13', stage:5, finished:true},
         {t:'릴스 #15', stage:0}
       ],
+      schedule:[
+        {date:'07/05', title:'소재 촬영 완료', status:'완료'},
+        {date:'07/09', title:'1차 편집본 내부검수', status:'완료'},
+        {date:'07/14', title:'고객사 컨펌 요청', status:'임박'},
+        {date:'07/15', title:'최종 출고', status:'예정'}
+      ],
       docs:[
         {n:'계약서_2026.pdf', type:'contract', date:'2026-01-08', who:'대표'},
         {n:'견적서_2026-06.pdf', type:'quote', date:'2026-06-02', who:'이보석'},
@@ -731,6 +739,12 @@
       stages:['기획(와이어프레임)','디자인시안','퍼블리싱/개발','내부QA','고객사컨펌','오픈'],
       cards:[
         {t:'리뉴얼 랜딩페이지', stage:4, approve:true}
+      ],
+      schedule:[
+        {date:'07/01', title:'디자인 시안 컨펌', status:'완료'},
+        {date:'07/10', title:'퍼블리싱 완료', status:'완료'},
+        {date:'07/14', title:'고객사 컨펌', status:'임박'},
+        {date:'07/16', title:'사이트 오픈', status:'예정'}
       ],
       docs:[
         {n:'계약서_2026.pdf', type:'contract', date:'2026-03-15', who:'대표'},
@@ -760,6 +774,12 @@
         {t:'브랜드 바이럴 #1', stage:0},
         {t:'제품 소개 릴스', stage:2, urgent:true}
       ],
+      schedule:[
+        {date:'07/11', title:'기획안 확정', status:'완료'},
+        {date:'07/13', title:'소재 촬영', status:'임박'},
+        {date:'07/16', title:'고객사 컨펌 예정', status:'예정'},
+        {date:'07/18', title:'최종 출고', status:'예정'}
+      ],
       docs:[
         {n:'계약서_2026.pdf', type:'contract', date:'2026-05-10', who:'대표'},
         {n:'견적서_2026-05.pdf', type:'quote', date:'2026-05-08', who:'이보석'}
@@ -783,6 +803,11 @@
       stages:['기획(와이어프레임)','디자인시안','퍼블리싱/개발','내부QA','고객사컨펌','오픈'],
       cards:[
         {t:'지점 소개 랜딩페이지', stage:1}
+      ],
+      schedule:[
+        {date:'06/25', title:'와이어프레임 컨펌', status:'완료'},
+        {date:'07/16', title:'디자인 시안 전달', status:'예정'},
+        {date:'07/22', title:'사이트 오픈', status:'예정'}
       ],
       docs:[
         {n:'계약서_2026.pdf', type:'contract', date:'2026-06-20', who:'대표'},
@@ -874,19 +899,36 @@
       '<div class="pav" style="background:'+tv.bg+';color:'+tv.c+'">'+currentProject.initial+'</div>'+
       '<div><h2>'+currentProject.name+'</h2><div class="pdmeta">'+currentProject.category+' · 진행률 '+currentProject.progress+'%</div></div>';
     renderProduction();
+    renderProjectSchedule();
     renderProjectDocs();
     setTab('production');
+  }
+
+  function schedPillClass(status){
+    if(status.indexOf('완료')>-1) return 'done';
+    if(status.indexOf('대기')>-1 || status.indexOf('임박')>-1) return 'wait';
+    return 'run';
+  }
+  function scheduleRowsHTML(items){
+    return '<div class="snslist">'+items.map(function(it){
+      var pillClass=schedPillClass(it.status);
+      var appr = (it.approve && role==='ceo') ? '<div class="actions"><button class="btn sm ok">승인</button><button class="btn sm no">반려</button></div>' : (it.approve ? '<span class="rolelock"><svg viewBox="0 0 24 24"><path d="M12 15a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M6 10V7a6 6 0 0 1 12 0v3"/><rect x="5" y="10" width="14" height="10" rx="2"/></svg>대표 승인 대기</span>':'');
+      return '<div class="snsrow"><span class="sd">'+it.date+'</span><span class="st2">'+it.title+'</span><span class="pill '+pillClass+'">'+it.status+'</span>'+appr+'</div>';
+    }).join('')+'</div>';
+  }
+
+  function renderProjectSchedule(){
+    var host=document.getElementById('tabSchedule');
+    var p=currentProject;
+    var items = p.type==='sns' ? p.snsItems : p.schedule;
+    host.innerHTML = items && items.length ? scheduleRowsHTML(items) : '<div class="empty">등록된 일정이 없습니다.</div>';
   }
 
   function renderProduction(){
     var host=document.getElementById('tabProduction');
     var p=currentProject;
     if(p.type==='sns'){
-      host.innerHTML='<div class="snslist">'+p.snsItems.map(function(it){
-        var pillClass = it.status==='발행완료'?'done':(it.status==='발행대기'?'wait':'run');
-        var appr = (it.approve && role==='ceo') ? '<div class="actions"><button class="btn sm ok">승인</button><button class="btn sm no">반려</button></div>' : (it.approve ? '<span class="rolelock"><svg viewBox="0 0 24 24"><path d="M12 15a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M6 10V7a6 6 0 0 1 12 0v3"/><rect x="5" y="10" width="14" height="10" rx="2"/></svg>대표 승인 대기</span>':'');
-        return '<div class="snsrow"><span class="sd">'+it.date+'</span><span class="st2">'+it.title+'</span><span class="pill '+pillClass+'">'+it.status+'</span>'+appr+'</div>';
-      }).join('')+'</div>';
+      host.innerHTML=scheduleRowsHTML(p.snsItems);
       return;
     }
     host.innerHTML='<div class="kanban">'+p.stages.map(function(stage,i){
@@ -984,6 +1026,7 @@
   function setTab(name){
     document.querySelectorAll('.tabs .tab').forEach(function(t){ t.classList.toggle('active', t.getAttribute('data-tab')===name); });
     document.getElementById('tabProduction').style.display = name==='production'?'block':'none';
+    document.getElementById('tabSchedule').style.display = name==='schedule'?'block':'none';
     document.getElementById('tabDocs').style.display = name==='docs'?'block':'none';
   }
   document.querySelectorAll('.tabs .tab').forEach(function(t){
